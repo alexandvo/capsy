@@ -1,6 +1,54 @@
+@import url("../stylesheets/variables.css");
+
 .rect {
-    background-color: red;
-    height: 12vh;
-    margin: 0;
-    padding: 0;
+  height: 12vh;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rect img {
+  width: 15vw;
+  height: 15vw;
+  position: absolute;
+  left: 20px;
+}
+
+.rect h1 {
+  font-family: var(--bold);
+  position: absolute;
+  font-size: 8vw;
+}
+
+#profilePicContainer {
+  width: 15vw;
+  height: 15vw;
+  position: absolute;
+  right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#pfpCir {
+  border-radius: 200px;
+  height: 60%;
+  width: 60%;
+  background-color: black;
+}
+
+@media (min-width: 500px) {
+  .rect h1 {
+    font-size: 40px;
+  }
+  .rect img {
+    width: 80px;
+    height: 80px;
+  }
+  #profilePicContainer {
+    width: 80px;
+    height: 80px;
+  }
 }

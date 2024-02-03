@@ -1,0 +1,47 @@
+@import url("../stylesheets/variables.css");
+
+#mainAreaContainer {
+  width: 100%;
+  height: 88vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#box {
+  border-radius: 20px;
+  height: 80%;
+  width: 80%;
+  border: 6px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#middleContainer img {
+  width: 6vw;
+  height: 6vw;
+  margin-bottom: 2px;
+}
+
+#middleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#middleContainer p {
+  font-family: var(--med);
+  font-size: 4vw;
+}
+
+@media (min-width: 800px) {
+    #middleContainer p {
+      font-size: 30px;
+    }
+    #middleContainer img {
+        width: 40px;
+        height: 40px;
+      }
+  }
