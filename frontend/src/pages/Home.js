@@ -3,11 +3,15 @@ import "../stylesheets/home.css";
 import "../stylesheets/global.css";
 import plus from "../assets/imgs/plus.png";
 import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
 
   const [showComponent, setShowComponent] = useState(true);
+
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,7 +40,8 @@ const Home = () => {
               <div className="formInputBox" id="titleBox">
                 <input type="text" placeholder="Title"></input>
               </div>
-              <div className="formInputBox" id="dateBox"></div>
+              <div className="formInputBox" id="dateBox">
+              <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} dateFormat="MMMM dd, yyyy" />              </div>
               <div className="formInputBox" id="descBox">
                 <textarea placeholder="Description"></textarea>
               </div>
