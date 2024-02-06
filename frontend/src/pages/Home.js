@@ -46,7 +46,7 @@ const Home = () => {
                 <div>Upload Note</div>
               </div>
               <div className="formInputBox" id="contentBox">
-                <div>
+                <div id="contentWrap">
                   <p>No content yet...</p>
                 </div>
               </div>
