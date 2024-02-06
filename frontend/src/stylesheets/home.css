@@ -10,12 +10,13 @@
 
 #box {
   border-radius: 20px;
-  height: 80%;
-  width: 80%;
+  aspect-ratio: 2 / 1;
+  width: 30%;
   border: 6px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
 #middleContainer img {
@@ -34,14 +35,180 @@
 #middleContainer p {
   font-family: var(--med);
   font-size: 4vw;
+  text-align: center;
+}
+
+#formBoxWrapper {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+#formBox {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  border: 8px solid black;
+  padding: 8vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 0.5fr 4fr 1fr;
+  grid-gap: 15px;
+  position: relative;
+}
+
+#formBox input {
+  width: 100%;
+  height: 100%;
+  word-wrap: break-word;
+  font-size: 4vw;
+  overflow: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  border: 0px solid black;
+  outline: none;
+  font-family: var(--reg);
+}
+
+#formBox textarea {
+  width: 100%;
+  height: 100%;
+  border: 0px solid black;
+  outline: none;
+  font-size: 20px;
+  font-family: var(--reg);
+}
+
+.formInputBox {
+  border-radius: 10px;
+  border: 5px solid black;
+  padding: 20px;
+}
+
+#createButton {
+  border-radius: 10px;
+  background-color: var(--acc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#createButton h1 {
+  font-size: 5vw;
+  color: white;
+  font-family: var(--bol);
+}
+
+#uploadContainer {
+  display: flex;
+  align-items: center;
+}
+
+#uploadContainer div {
+  margin-right: 10px;
+  font-family: var(--med);
+  height: 100%;
+  border-radius: 10px;
+  background-color: var(--acc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 2.5vw;
+  text-align: center;
+  color: white;
+}
+
+#minButton {
+  background-color: red;
+  height: 6vw;
+  width: 6vw;
+  position: absolute;
+  right: 2vw;
+  top: 2vw;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.crossPiece {
+  background-color: white;
+  border-radius: 100px;
+  height: 50%;
+  width: 8%;
+  position: absolute;
+  transform: rotate(45deg);
+}
+
+.crossPiece:nth-child(1) {
+  transform: rotate(-45deg);
+}
+
+.formInputBox div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--sup);
+  font-family: var(--reg);
+  font-size: 20px;
 }
 
 @media (min-width: 800px) {
-    #middleContainer p {
-      font-size: 30px;
-    }
-    #middleContainer img {
-        width: 40px;
-        height: 40px;
-      }
+  #middleContainer p {
+    font-size: 30px;
   }
+  #middleContainer img {
+    width: 40px;
+    height: 40px;
+  }
+  #uploadContainer div {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 700px) {
+  #formBox {
+    padding: 45px;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 2fr 0.5fr 4fr 1fr;
+  }
+  #descBox {
+    grid-column: span 2;
+  }
+  #uploadContainer {
+    grid-column: span 2;
+  }
+  #contentBox {
+    grid-column: span 2;
+  }
+  #createButton {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 700px) {
+  #createButton h1 {
+    font-size: 30px;
+  }
+  #minButton {
+    height: 35px;
+    width: 35px;
+    right: 8px;
+    top: 8px;
+  }
+  #formBox input {
+    font-size: 20px;
+  }
+  #formBox textarea {
+    font-size: 20px;
+  }
+}
+
+@media (min-height: 600px) {
+  #mainAreaContainer {
+    height: calc(100vh - 80px);
+  }
+}
