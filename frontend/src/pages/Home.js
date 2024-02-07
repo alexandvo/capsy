@@ -33,10 +33,8 @@ const Home = () => {
   }, []); // Empty dependency array means this effect runs once after the initial render
 
   return (
-    <Layout>
-      <CapsuleList />
-      
-      {/* <div id="mainAreaContainer">
+    <Layout>      
+      <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
             <div id="formBox">
@@ -90,7 +88,7 @@ const Home = () => {
             </div>
           </div>
         )}
-      </div> */}
+      </div>
     </Layout>
   );
 };
