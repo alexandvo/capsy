@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CapsuleList from "./CapsuleList";
+import CapsuleInfo from "./CapsuleInfo";
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
@@ -33,8 +34,9 @@ const Home = () => {
   }, []); // Empty dependency array means this effect runs once after the initial render
 
   return (
-    <Layout>      
-      <div id="mainAreaContainer">
+    <Layout>  
+      <CapsuleInfo />    
+      {/* <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
             <div id="formBox">
@@ -88,7 +90,7 @@ const Home = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </Layout>
   );
 };

@@ -1,0 +1,71 @@
+@import url("../stylesheets/variables.css");
+
+#mainContainer {
+  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#pfpWrap {
+  background-color: green;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  height: 35vw;
+  margin-bottom: 10px;
+}
+
+#buttonWrap {
+  height: 10vw;
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#buttonWrap img {
+  height: 90%;
+  object-fit: contain;
+}
+
+#buttonWrap img:nth-child(2) {
+  margin-left: 10px;
+}
+
+#mainContainer h1 {
+  font-size: 8vw;
+  font-family: var(--bol);
+  margin-bottom: 0px;
+}
+
+#desc {
+  width: 80vw;
+  word-wrap: break-word;
+  text-align: center;
+  font-size: 4vw;
+  color: var(--sup);
+  font-family: var(--reg);
+  outline: none;
+  border: 0px;
+  resize: none;
+  margin-bottom: 10px;
+}
+
+#lock {
+  object-fit: contain;
+  width: 20vw;
+}
+
+#status {
+  font-family: var(--med);
+  font-size: 6vw;
+  margin-bottom: 20px;
+}
+
+@media (min-height: 600px) {
+  #mainContainer {
+    height: calc(100vh - 80px);
+  }
+}

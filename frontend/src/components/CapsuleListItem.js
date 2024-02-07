@@ -1,4 +1,4 @@
-import "../stylesheets/home.css";
+import "../stylesheets/global.css";
 import "../stylesheets/capsuleListItem.css";
 
 const CapsuleListItem = ( {title = 'Title', desc = 'Desc', date = 'Date'} ) => {
