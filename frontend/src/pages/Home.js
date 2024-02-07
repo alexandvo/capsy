@@ -5,6 +5,7 @@ import plus from "../assets/imgs/plus.png";
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import CapsuleList from "./CapsuleList";
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
@@ -33,7 +34,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <div id="mainAreaContainer">
+      <CapsuleList />
+      
+      {/* <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
             <div id="formBox">
@@ -87,9 +90,10 @@ const Home = () => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </Layout>
   );
 };
 
 export default Home;
+

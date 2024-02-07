@@ -1,0 +1,104 @@
+@import url("../stylesheets/variables.css");
+
+#mainWrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 5vw auto 4fr auto 5vw;
+  grid-template-rows: 1fr 2fr 2fr 1fr;
+}
+
+#mainWrapper div {
+  border: 0px solid black;
+}
+
+#exclamation {
+  grid-row: 2 / 4;
+  grid-column: 1 / 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  font-family: var(--bol);
+  font-size: 6vw;
+}
+
+#mainWrapper div:nth-child(2) {
+  grid-row: 2 / 4;
+}
+
+#mainWrapper div:nth-child(3) {
+  grid-row: 2 / 3;
+  grid-column: 3 / 4;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 4vw;
+  font-family: var(--med);
+  padding-left: 2vw;
+  padding-right: 2vw;
+  overflow: hidden;
+}
+
+.overflowContainer {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#desc {
+    color: var(--sup);
+}
+
+#mainWrapper div:nth-child(4) {
+  grid-row: 3 / 4;
+  grid-column: 3 / 5;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  font-size: 2.5vw;
+  font-family: var(--reg);
+  padding-left: 2vw;
+  overflow: hidden;
+}
+
+#mainWrapper div:nth-child(5) {
+  grid-row: 2 / 3;
+  grid-column: 4 / 5;
+}
+
+#picContainer {
+  width: 15vw;
+  aspect-ratio: 1 / 1;
+  border-radius: 2vw;
+  background-color: orange;
+}
+
+#date {
+  font-size: 4vw;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: var(--med);
+}
+
+@media (min-width: 700px) {
+  #picContainer {
+    width: 100px;
+    border-radius: 20px;
+  }
+  #date {
+    font-size: 30px;
+  }
+  #mainWrapper div:nth-child(3) {
+    font-size: 30px;
+  }
+  #mainWrapper div:nth-child(4) {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1100px) {
+  #exclamation {
+    font-size: 60px;
+  }
+}
