@@ -22,21 +22,22 @@
   font-size: 6vw;
 }
 
-#mainWrapper div:nth-child(2) {
+#picContainer {
   grid-row: 2 / 4;
 }
 
-#mainWrapper div:nth-child(3) {
+#titleWrapper {
   grid-row: 2 / 3;
   grid-column: 3 / 4;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  font-size: 4vw;
+  font-size: 5vw;
   font-family: var(--med);
   padding-left: 2vw;
   padding-right: 2vw;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .overflowContainer {
@@ -45,11 +46,12 @@
   white-space: nowrap;
 }
 
-#desc {
-    color: var(--sup);
+#descr {
+  color: var(--sup);
+  font-size: 4vw;
 }
 
-#mainWrapper div:nth-child(4) {
+#descWrapper {
   grid-row: 3 / 4;
   grid-column: 3 / 5;
   display: flex;
@@ -59,26 +61,24 @@
   font-family: var(--reg);
   padding-left: 2vw;
   overflow: hidden;
-}
-
-#mainWrapper div:nth-child(5) {
-  grid-row: 2 / 3;
-  grid-column: 4 / 5;
-}
-
-#picContainer {
-  width: 15vw;
-  aspect-ratio: 1 / 1;
-  border-radius: 2vw;
-  background-color: orange;
+  text-overflow: ellipsis;
 }
 
 #date {
+  grid-row: 2 / 3;
+  grid-column: 4 / 5;
   font-size: 4vw;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   font-family: var(--med);
+}
+
+#picContainer {
+  width: 14vw;
+  aspect-ratio: 1 / 1;
+  border-radius: 2vw;
+  background-color: orange;
 }
 
 @media (min-width: 700px) {
@@ -89,11 +89,11 @@
   #date {
     font-size: 30px;
   }
-  #mainWrapper div:nth-child(3) {
+  #titleWrapper {
     font-size: 30px;
   }
-  #mainWrapper div:nth-child(4) {
-    font-size: 20px;
+  #descr {
+    font-size: 25px;
   }
 }
 

@@ -35,7 +35,8 @@ const Home = () => {
 
   return (
     <Layout>  
-      <CapsuleInfo />    
+      {/* <CapsuleInfo />     */}
+      <CapsuleList />
       {/* <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
