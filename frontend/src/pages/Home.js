@@ -36,8 +36,8 @@ const Home = () => {
   return (
     <Layout>  
       {/* <CapsuleInfo />     */}
-      <CapsuleList />
-      {/* <div id="mainAreaContainer">
+      {/* <CapsuleList /> */}
+      <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
             <div id="formBox">
@@ -91,7 +91,7 @@ const Home = () => {
             </div>
           </div>
         )}
-      </div> */}
+      </div>
     </Layout>
   );
 };

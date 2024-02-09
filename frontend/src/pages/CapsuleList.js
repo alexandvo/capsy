@@ -1,8 +1,9 @@
 import CapsuleListItem from "../components/CapsuleListItem";
+import Layout from "../components/Layout";
 
 const CapsuleList = () => {
   return (
-    <>
+    <Layout>
       <CapsuleListItem
         title="Time Capsule #1"
         desc="This is the description lolz"
@@ -18,7 +19,7 @@ const CapsuleList = () => {
         desc="This is the description 3 lolz"
         date="8/30/2100"
       />
-    </>
+    </Layout>
   );
 };
 

@@ -1,13 +1,16 @@
 import "../stylesheets/header.css";
-import icon from "../assets/imgs/time-capsule-icon.png"
+import icon from "../assets/imgs/time-capsule-icon.png";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <div className="rect">
       <div id="iconPicContainer">
-      <img src={icon}/>
-
+        <Link to="/">
+          <img src={icon} />
+        </Link>
       </div>
+
       <h1>Capsy</h1>
       <div id="profilePicContainer">
         <div id="pfpCir"></div>
@@ -17,4 +20,3 @@ const Header = () => {
 };
 
 export default Header;
-
