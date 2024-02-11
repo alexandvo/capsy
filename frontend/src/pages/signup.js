@@ -1,6 +1,7 @@
 import "../stylesheets/login-signup.css";
 import logoIcon from "../assets/imgs/time-capsule-icon.png";
-import "../stylesheets/global.css"
+import "../stylesheets/global.css";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   return (
@@ -27,7 +28,9 @@ const Signup = () => {
       </div>
       <div className="signUpContainer">
         <p>Already have an account?</p>
-        <p className="link">Log in</p>
+        <Link to="/login" style={{ color: "black" }}>
+          <p className="link">Log in</p>
+        </Link>
       </div>
     </>
   );

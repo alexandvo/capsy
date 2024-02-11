@@ -69,3 +69,24 @@
     height: calc(100vh - 80px);
   }
 }
+
+@media (min-width: 500px) {
+  #pfpWrap {
+    height: 180px;
+  }
+  #buttonWrap {
+    height: 50px;
+  }
+  #mainContainer h1 {
+    font-size: 40px;
+  }
+  #desc {
+    font-size: 20px;
+  }
+  #status {
+    font-size: 30px;
+  }
+  #lock {
+    width: 100px;
+  }
+}
