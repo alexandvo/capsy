@@ -25,7 +25,7 @@
 <h3 align="center">Capsy</h3>
 
   <p align="center">
-    project_description
+    A virtual time capsule to remind yourselves of priceless memories. Create, wait, and open!
     <br />
     <a href="https://github.com/alexandvo/capsy"><strong>Explore the docs »</strong></a>
     <br />
