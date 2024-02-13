@@ -19,7 +19,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/alexandvo/capsy">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/time-capsule-icon.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Capsy</h3>
