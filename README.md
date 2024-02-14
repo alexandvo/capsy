@@ -180,7 +180,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Alexander Vo - [@linkedin_handle](https://www.linkedin.com/in/alexandvo) - alexthevo04@gmail.com
+Alexander Vo - [@my_linkedin](https://www.linkedin.com/in/alexandvo) - alexthevo04@gmail.com
 
 Project Link: [https://github.com/alexandvo/capsy](https://github.com/alexandvo/capsy)
 
