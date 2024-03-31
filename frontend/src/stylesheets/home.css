@@ -159,9 +159,9 @@
 #contentWrap {
   width: 100%;
   height: 100%;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   color: var(--sup);
   font-family: var(--reg);
   font-size: 20px;
