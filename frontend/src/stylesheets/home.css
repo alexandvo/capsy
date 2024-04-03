@@ -160,11 +160,20 @@
   width: 100%;
   height: 100%;
   /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  flex-wrap: wrap; */
+  /* justify-content: center;
+  align-items: center;  */
+
   color: var(--sup);
   font-family: var(--reg);
   font-size: 20px;
+  overflow-x: auto;
+}
+
+#contentItemContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 @media (min-width: 800px) {
@@ -177,6 +186,9 @@
   }
   #uploadContainer div {
     font-size: 20px;
+  }
+  #contentItemContainer {
+    justify-content: flex-start;
   }
 }
 

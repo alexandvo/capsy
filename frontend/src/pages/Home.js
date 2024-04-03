@@ -5,6 +5,7 @@ import plus from "../assets/imgs/plus.png";
 import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ContentItem from "../components/ContentItem";
 // import CapsuleList from "./CapsuleList";
 // import CapsuleInfo from "./CapsuleInfo";
 
@@ -41,7 +42,9 @@ const Home = () => {
   }
 
   const removeFile = (indexToRemove) => {
-    setSelectedFiles(selectedFiles.filter((_, index) => index !== indexToRemove));
+    setSelectedFiles(
+      selectedFiles.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   useEffect(() => {
@@ -99,44 +102,57 @@ const Home = () => {
               <div className="formInputBox" id="contentBox">
                 <div id="contentWrap">
                   {selectedFiles.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                      <ul>
-                        {selectedFiles.map((file, index) => (
-                          <li key={index}>
-                            {file.type.startsWith("image/") && (
-                              <img
-                                src={URL.createObjectURL(file)}
-                                alt={file.name}
-                                style={{
-                                  maxWidth: 150,
-                                  maxHeight: 150,
-                                  marginRight: 10,
-                                }}
-                              />
-                            )}
-                            {file.type.startsWith("video/") && (
-                              <video
-                                src={URL.createObjectURL(file)}
-                                alt={file.name}
-                                controls
-                                style={{
-                                  maxWidth: 150,
-                                  maxHeight: 150,
-                                  marginRight: 10,
-                                }}
-                              />
-                            )}
-                            <button onClick={() => removeFile(index)}>
-                              Remove
-                            </button>
-                            {file.name}
-                          </li>
-                        ))}
-                      </ul>
+                    <div id="contentItemContainer">
+                      {selectedFiles.map((file, index) => (
+                        <ContentItem
+                          index={index}
+                          file={file}
+                          removeFileFunc={removeFile}
+                        />
+                        // <li key={index} style={{listStyle: 'none', margin: "10px", width: "100px", height: "40px", objectFit: "cover"}}>
+                        //   {file.type.startsWith("image/") && (
+                        //     <img
+                        //       src={URL.createObjectURL(file)}
+                        //       alt={file.name}
+                        //       style={{
+                        //         maxWidth: 150,
+                        //         maxHeight: 150,
+                        //         marginRight: 10,
+                        //       }}
+                        //     />
+                        //   )}
+                        //   {file.type.startsWith("video/") && (
+                        //     <video
+                        //       src={URL.createObjectURL(file)}
+                        //       alt={file.name}
+                        //       //controls
+                        //       style={{
+                        //         maxWidth: 150,
+                        //         maxHeight: 150,
+                        //         marginRight: 10,
+                        //       }}
+                        //     />
+                        //   )}
+                        //   <button onClick={() => removeFile(index)}>
+                        //     Remove
+                        //   </button>
+                        //   {file.name}
+                        // </li>
+                      ))}
                     </div>
                   )}
-
-                  {/* <p>No content yet...</p> */}
+                  {selectedFiles.length == 0 && (
+                    <div
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p>No content yet...</p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div id="createButton">
