@@ -1,7 +1,6 @@
-const ContentItem = ({ index, file, removeFileFunc }) => {
+const ContentItem = ({ ky, index, file, removeFileFunc }) => {
   return (
     <div
-      key={index}
       style={{
         listStyle: "none",
         width: "100px",
@@ -9,6 +8,9 @@ const ContentItem = ({ index, file, removeFileFunc }) => {
         position: "relative",
         overflow: "hidden",
         margin: "10px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
       }}
     >
       {file.type.startsWith("image/") && (

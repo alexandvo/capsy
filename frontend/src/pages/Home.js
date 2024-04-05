@@ -11,8 +11,11 @@ import ContentItem from "../components/ContentItem";
 
 const Home = () => {
   const fileInputRef = useRef();
+  const coverInputRef = useRef();
 
   const [showForm, setShowForm] = useState(false);
+
+  const [coverBeenSet, setCoverBeenSet] = useState(false);
 
   const [showComponent, setShowComponent] = useState(true);
 
@@ -24,7 +27,13 @@ const Home = () => {
     fileInputRef.current.click();
   }
 
-  function handleFileChange(event) {
+  function handleCoverClick() {
+    if (!coverBeenSet) {
+      coverInputRef.current.click();
+    }
+  }
+
+  const handleFileChange = (event) => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -39,12 +48,21 @@ const Home = () => {
     setSelectedFiles([...selectedFiles, ...files]);
 
     event.target.value = null;
-  }
+  };
 
   const removeFile = (indexToRemove) => {
     setSelectedFiles(
       selectedFiles.filter((_, index) => index !== indexToRemove)
     );
+  };
+
+  const handleCoverChange = (event) => {
+    const coverFile = event.target.files[0];
+    setCoverBeenSet(true);
+
+    setSelectedFiles([...selectedFiles, coverFile]);
+
+    event.target.value = null;
   };
 
   useEffect(() => {
@@ -75,6 +93,13 @@ const Home = () => {
         onChange={handleFileChange}
         multiple
       />
+      <input
+        type="file"
+        ref={coverInputRef}
+        style={{ display: "none" }}
+        accept="image/*"
+        onChange={handleCoverChange}
+      />
       {/* <CapsuleInfo />     */}
       {/* <CapsuleList /> */}
       <div id="mainAreaContainer">
@@ -89,15 +114,18 @@ const Home = () => {
                   selected={startDate}
                   onChange={(date) => setStartDate(date)}
                   dateFormat="MMMM dd, yyyy"
-                />{" "}
+                />
               </div>
               <div className="formInputBox" id="descBox">
                 <textarea placeholder="Description"></textarea>
               </div>
               <div id="uploadContainer">
-                <div>Upload Cover</div>
-                <div onClick={handleUploadContentClick}>Upload Content</div>
-                <div>Upload Note</div>
+                <div id="coverButton" onClick={handleCoverClick}>
+                  Upload Cover
+                </div>
+                <div onClick={handleUploadContentClick} id="contentButton">
+                  Upload Content
+                </div>
               </div>
               <div className="formInputBox" id="contentBox">
                 <div id="contentWrap">
@@ -105,39 +133,11 @@ const Home = () => {
                     <div id="contentItemContainer">
                       {selectedFiles.map((file, index) => (
                         <ContentItem
+                          key={index}
                           index={index}
                           file={file}
                           removeFileFunc={removeFile}
                         />
-                        // <li key={index} style={{listStyle: 'none', margin: "10px", width: "100px", height: "40px", objectFit: "cover"}}>
-                        //   {file.type.startsWith("image/") && (
-                        //     <img
-                        //       src={URL.createObjectURL(file)}
-                        //       alt={file.name}
-                        //       style={{
-                        //         maxWidth: 150,
-                        //         maxHeight: 150,
-                        //         marginRight: 10,
-                        //       }}
-                        //     />
-                        //   )}
-                        //   {file.type.startsWith("video/") && (
-                        //     <video
-                        //       src={URL.createObjectURL(file)}
-                        //       alt={file.name}
-                        //       //controls
-                        //       style={{
-                        //         maxWidth: 150,
-                        //         maxHeight: 150,
-                        //         marginRight: 10,
-                        //       }}
-                        //     />
-                        //   )}
-                        //   <button onClick={() => removeFile(index)}>
-                        //     Remove
-                        //   </button>
-                        //   {file.name}
-                        // </li>
                       ))}
                     </div>
                   )}
