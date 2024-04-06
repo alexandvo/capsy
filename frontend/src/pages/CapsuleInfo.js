@@ -3,7 +3,6 @@ import "../stylesheets/capsuleInfo.css";
 import lock from "../assets/imgs/locked.png";
 import edit from "../assets/imgs/edit.png";
 import del from "../assets/imgs/delete.png";
-import TextareaAutosize from "react-textarea-autosize";
 import Layout from "../components/Layout";
 
 const CapsuleInfo = ({
@@ -11,6 +10,7 @@ const CapsuleInfo = ({
   title = "Title",
   unlockable = false,
 }) => {
+
   return (
     <Layout>
       <div id="mainContainer">
@@ -20,7 +20,7 @@ const CapsuleInfo = ({
           <img id="del" src={del} alt="delete" />
         </div>
         <h1>{title}</h1>
-        <TextareaAutosize id="desc" value={desc} maxRows={5} />
+        <p>{desc}</p>
         <p id="status">{unlockable ? "Unlockable Now!" : "Locked"}</p>
         <img id="lock" src={lock} alt="lock" />
       </div>

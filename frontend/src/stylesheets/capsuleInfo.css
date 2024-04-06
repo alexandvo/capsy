@@ -1,11 +1,13 @@
 @import url("../stylesheets/variables.css");
 
 #mainContainer {
-  height: 88vh;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  
 }
 
 #pfpWrap {
@@ -30,6 +32,10 @@
   object-fit: contain;
 }
 
+#buttonWrap img:hover {
+  cursor: pointer;
+}
+
 #buttonWrap img:nth-child(2) {
   margin-left: 10px;
 }
@@ -38,6 +44,12 @@
   font-size: 8vw;
   font-family: var(--bol);
   margin-bottom: 0px;
+  word-wrap: break-word;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+
 }
 
 #desc {
@@ -53,6 +65,18 @@
   margin-bottom: 10px;
 }
 
+#mainContainer p {
+  width: 100%;
+  word-wrap: break-word;
+  text-align: center;
+  font-size: 2vw;
+  color: var(--sup);
+  font-family: var(--reg);
+  margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 #lock {
   object-fit: contain;
   width: 20vw;
@@ -66,7 +90,7 @@
 
 @media (min-height: 600px) {
   #mainContainer {
-    height: calc(100vh - 80px);
+    /* height: calc(100vh - 80px); */
   }
 }
 
@@ -81,6 +105,9 @@
     font-size: 40px;
   }
   #desc {
+    font-size: 20px;
+  }
+  #mainContainer p {
     font-size: 20px;
   }
   #status {

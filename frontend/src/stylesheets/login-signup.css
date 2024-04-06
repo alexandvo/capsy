@@ -74,6 +74,10 @@
   padding: 3%;
   font-family: var(--bol);
   color: white;
+  user-select: none; /* Standard syntax */
+  -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
+  -moz-user-select: none; /* Mozilla Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 .loginContainer p {
@@ -84,10 +88,15 @@
 }
 
 .link {
-  margin-left: 5px;
+  text-decoration: underline;
+}
+
+.link:hover {
+  cursor: pointer;
 }
 
 .logo {
   width: 100px;
   height: 100px;
 }
+

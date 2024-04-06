@@ -112,6 +112,10 @@
   font-size: 5vw;
   color: white;
   font-family: var(--bol);
+  user-select: none; /* Standard syntax */
+  -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
+  -moz-user-select: none; /* Mozilla Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 #uploadContainer {
@@ -179,12 +183,26 @@
   overflow-x: auto;
 }
 
+#coverButton {
+  user-select: none; /* Standard syntax */
+  -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
+  -moz-user-select: none; /* Mozilla Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
 #coverButton:hover {
   cursor: pointer;
 }
 
 #noteButton:hover {
   cursor: pointer
+}
+
+#contentButton {
+  user-select: none; /* Standard syntax */
+  -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
+  -moz-user-select: none; /* Mozilla Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 #contentButton:hover {

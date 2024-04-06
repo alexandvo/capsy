@@ -6,6 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ContentItem from "../components/ContentItem";
+import { Link } from "react-router-dom";
+
 // import CapsuleList from "./CapsuleList";
 // import CapsuleInfo from "./CapsuleInfo";
 
@@ -13,7 +15,7 @@ const Home = () => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
 
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true);
 
   const [coverBeenSet, setCoverBeenSet] = useState(false);
 
@@ -185,17 +187,18 @@ const Home = () => {
                 <h1>Create Time Capsule</h1>
               </div>
 
-              <div
+              {/* <div
                 id="minButton"
                 onClick={() => {
-                  setShowForm(false);
+                  setShowForm(true);
                 }}
               >
                 <div className="crossPiece"></div>
                 <div className="crossPiece"></div>
-              </div>
+              </div> */}
             </div>
           </div>
+          
         ) : (
           <div
             id="box"
