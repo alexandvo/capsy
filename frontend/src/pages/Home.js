@@ -30,27 +30,42 @@ const Home = () => {
   function handleCoverClick() {
     if (!coverBeenSet) {
       coverInputRef.current.click();
+    } else {
+      window.alert("Only one cover image may be used.");
     }
   }
 
   const handleFileChange = (event) => {
     const files = event.target.files;
+    
+    let fileObjList = [];
+    
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
-        console.log("Selected file:", file);
+        const fileObj = {
+          rawFile: file,
+          isCover: false,
+        };
+        fileObjList = [...fileObjList, fileObj]
       } else {
-        console.error("Unsupported file type:", file.type);
+        window.alert("Unsupported file type: " + file.type + "\nPlease choose either an image or a video.", file.type);
+        event.target.value = null;
         return;
       }
     }
 
-    setSelectedFiles([...selectedFiles, ...files]);
-
     event.target.value = null;
+
+    setSelectedFiles([...selectedFiles, ...fileObjList]);
+
   };
 
-  const removeFile = (indexToRemove) => {
+  const removeFile = (indexToRemove, isCover) => {
+    if (isCover) {
+      setCoverBeenSet(false);
+    }
     setSelectedFiles(
       selectedFiles.filter((_, index) => index !== indexToRemove)
     );
@@ -58,11 +73,22 @@ const Home = () => {
 
   const handleCoverChange = (event) => {
     const coverFile = event.target.files[0];
+    if (coverFile.type.startsWith("video/")) {
+      window.alert("Unsupported file type: " + coverFile.type + "\nPlease choose an image.", coverFile.type);
+      event.target.value = null;
+      return;
+    }
+    const fileObj = {
+      rawFile: coverFile,
+      isCover: true,
+    };
     setCoverBeenSet(true);
 
-    setSelectedFiles([...selectedFiles, coverFile]);
-
     event.target.value = null;
+
+    setSelectedFiles([fileObj, ...selectedFiles]);
+
+    
   };
 
   useEffect(() => {
@@ -131,17 +157,17 @@ const Home = () => {
                 <div id="contentWrap">
                   {selectedFiles.length > 0 && (
                     <div id="contentItemContainer">
-                      {selectedFiles.map((file, index) => (
+                      {selectedFiles.map((fileObj, index) => (
                         <ContentItem
                           key={index}
                           index={index}
-                          file={file}
+                          fileObj={fileObj}
                           removeFileFunc={removeFile}
                         />
                       ))}
                     </div>
                   )}
-                  {selectedFiles.length == 0 && (
+                  {selectedFiles.length === 0 && (
                     <div
                       style={{
                         height: "100%",

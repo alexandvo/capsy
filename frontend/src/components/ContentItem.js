@@ -1,4 +1,6 @@
-const ContentItem = ({ ky, index, file, removeFileFunc }) => {
+const ContentItem = ({ index, fileObj, removeFileFunc }) => {
+  const file = fileObj.rawFile;
+  const isCover = fileObj.isCover;
   return (
     <div
       style={{
@@ -10,7 +12,8 @@ const ContentItem = ({ ky, index, file, removeFileFunc }) => {
         margin: "10px",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        border: isCover ? "5px solid red" : "" 
       }}
     >
       {file.type.startsWith("image/") && (
@@ -30,7 +33,7 @@ const ContentItem = ({ ky, index, file, removeFileFunc }) => {
       <div
         style={{ position: "absolute", top: "0px", right: "0px" }}
         id="minButton"
-        onClick={() => removeFileFunc(index)}
+        onClick={() => removeFileFunc(index, isCover)}
       >
         <div className="crossPiece"></div>
         <div className="crossPiece"></div>
