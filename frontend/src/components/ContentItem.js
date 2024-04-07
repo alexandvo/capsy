@@ -31,7 +31,7 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
         />
       )}
       <div
-        style={{ position: "absolute", top: "0px", right: "0px" }}
+        style={{ position: "absolute", top: "0px", right: "0px"}}
         id="minButton"
         onClick={() => removeFileFunc(index, isCover)}
       >

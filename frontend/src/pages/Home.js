@@ -15,15 +15,14 @@ const Home = () => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
 
+  const [description, setDescription] = useState("");
   const [showForm, setShowForm] = useState(true);
-
   const [coverBeenSet, setCoverBeenSet] = useState(false);
-
   const [showComponent, setShowComponent] = useState(true);
-
-  const [startDate, setStartDate] = useState(new Date());
-
+  const [date, setDate] = useState(new Date());
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showExpandedDesc, setShowExpandedDesc] = useState(false);
+  const expendedDescRef = useRef();
 
   function handleUploadContentClick() {
     fileInputRef.current.click();
@@ -37,11 +36,21 @@ const Home = () => {
     }
   }
 
+  const expandDesc = () => {
+    
+    setShowExpandedDesc(true);
+  };
+  const minimizeDesc = () => {
+    setShowExpandedDesc(false);
+  };
+  const handleDescChange = (event) => {
+    setDescription(event.target.value);
+  }
+
   const handleFileChange = (event) => {
     const files = event.target.files;
-    
+
     let fileObjList = [];
-    
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -50,9 +59,14 @@ const Home = () => {
           rawFile: file,
           isCover: false,
         };
-        fileObjList = [...fileObjList, fileObj]
+        fileObjList = [...fileObjList, fileObj];
       } else {
-        window.alert("Unsupported file type: " + file.type + "\nPlease choose either an image or a video.", file.type);
+        window.alert(
+          "Unsupported file type: " +
+            file.type +
+            "\nPlease choose either an image or a video.",
+          file.type
+        );
         event.target.value = null;
         return;
       }
@@ -61,7 +75,6 @@ const Home = () => {
     event.target.value = null;
 
     setSelectedFiles([...selectedFiles, ...fileObjList]);
-
   };
 
   const removeFile = (indexToRemove, isCover) => {
@@ -76,7 +89,12 @@ const Home = () => {
   const handleCoverChange = (event) => {
     const coverFile = event.target.files[0];
     if (coverFile.type.startsWith("video/")) {
-      window.alert("Unsupported file type: " + coverFile.type + "\nPlease choose an image.", coverFile.type);
+      window.alert(
+        "Unsupported file type: " +
+          coverFile.type +
+          "\nPlease choose an image.",
+        coverFile.type
+      );
       event.target.value = null;
       return;
     }
@@ -89,9 +107,13 @@ const Home = () => {
     event.target.value = null;
 
     setSelectedFiles([fileObj, ...selectedFiles]);
-
-    
   };
+
+  useEffect(() => {
+    if (showExpandedDesc) {
+      expendedDescRef.current.focus();
+    }
+  }, [showExpandedDesc]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -139,13 +161,14 @@ const Home = () => {
               </div>
               <div className="formInputBox" id="dateBox">
                 <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
+                  selected={date}
+                  onChange={(date) => setDate(date)}
                   dateFormat="MMMM dd, yyyy"
                 />
               </div>
-              <div className="formInputBox" id="descBox">
-                <textarea placeholder="Description"></textarea>
+              <div className="formInputBox" id="descBox" onClick={expandDesc}>
+                <textarea placeholder="Notes" value={description ? description : ""} readOnly>
+                </textarea>
               </div>
               <div id="uploadContainer">
                 <div id="coverButton" onClick={handleCoverClick}>
@@ -196,9 +219,22 @@ const Home = () => {
                 <div className="crossPiece"></div>
                 <div className="crossPiece"></div>
               </div> */}
+              {showExpandedDesc && <textarea id="eDesc" placeholder="Type notes here..." ref={expendedDescRef} value={description ? description : ""} onChange={handleDescChange}></textarea>}
             </div>
+            {showExpandedDesc && (
+              <div
+                id="descMinButton"
+                onClick={minimizeDesc}
+                
+              >
+                <div style={{width: "100%", height: "100%"}}>
+                  <div className="crossPiece"></div>
+                <div className="crossPiece"></div>
+                </div>
+                
+              </div>
+            )}
           </div>
-          
         ) : (
           <div
             id="box"
