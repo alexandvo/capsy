@@ -2,10 +2,14 @@ import "../stylesheets/login-signup.css";
 import logoIcon from "../assets/imgs/time-capsule-icon.png";
 import "../stylesheets/global.css";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import openEye from "../assets/imgs/open-eye.png"
+import closeEye from "../assets/imgs/close-eye.png"
 
 const Login = () => {
   const linkRef = useRef();
+  const [showingPassword, setShowingPassword] = useState(false);
+
   return (
     <>
       <div className="mainContainer">
@@ -20,7 +24,32 @@ const Login = () => {
             </div>
             <div className="inputBox">
               <h4>Password</h4>
-              <input type="text" placeholder="Enter your password..."></input>
+              <div
+                style={{ width: "100%", display: "flex", flexDirection: "row" }}
+              >
+                <input
+                  type={showingPassword ? "text" : "password"}
+                  className="password"
+                  placeholder="Enter your password..."
+                ></input>
+                <div
+                  onClick={() => {
+                    setShowingPassword(!showingPassword);
+                  }}
+                  style={{
+                    width: "10%",
+                    height: "auto",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    style={{ width: "60%" }}
+                    src={showingPassword ? closeEye : openEye}
+                  />
+                </div>
+              </div>
             </div>
             <div className="loginButt">
               <div>Log in</div>
