@@ -13,7 +13,7 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        border: isCover ? "5px solid red" : "" 
+        border: isCover ? "4px solid red" : "" 
       }}
     >
       {file.type.startsWith("image/") && (

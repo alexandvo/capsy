@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ContentItem from "../components/ContentItem";
-import { Link } from "react-router-dom";
 
 // import CapsuleList from "./CapsuleList";
 // import CapsuleInfo from "./CapsuleInfo";
@@ -228,8 +227,8 @@ const Home = () => {
                 
               >
                 <div style={{width: "100%", height: "100%"}}>
-                  <div className="crossPiece"></div>
-                <div className="crossPiece"></div>
+                  <div className="checkPiece"></div>
+                  <div className="checkPiece"></div>
                 </div>
                 
               </div>
