@@ -1,21 +1,23 @@
 import "../stylesheets/login-signup.css";
 import logoIcon from "../assets/imgs/time-capsule-icon.png";
 import "../stylesheets/global.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate , useNavigate} from "react-router-dom";
 import { useRef, useState } from "react";
 import openEye from "../assets/imgs/open-eye.png";
 import closeEye from "../assets/imgs/close-eye.png";
 import {
-  doPasswordChange,
-  doPasswordReset,
+  // doPasswordChange,
+  // doPasswordReset,
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../../src/firebase/auth";
 import { useAuth } from "../../src/contexts/authContext";
 import google from "../assets/imgs/google.png"
-import { auth } from "../firebase/firebase";
+// import { auth } from "../firebase/firebase";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const { userLoggedIn } = useAuth();
 
   const linkRef = useRef();
@@ -26,11 +28,8 @@ const Login = () => {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleForgotPassword = () => {
-    // doPasswordReset("alexthevo04@gmail.com"); 
-    //we will navigate to forgot password screen which will have one field which is 
-    //email, then we will button to send password-change email. 
-    //use emailRef.current.value for the parameter for function
+  const handleForgotPasswordClick = () => {
+    navigate('/forgotpassword');
   }
 
   const handleLoginSubmit = async () => {
@@ -79,7 +78,7 @@ const Login = () => {
             <div className="inputBox">
               {/* <h4>Password</h4> */}
               <div
-                style={{ width: "100%", display: "flex", flexDirection: "row" }}
+                style={{ width: "100%", display: "flex", flexDirection: "row",}}
               >
                 <input
                   type={showingPassword ? "text" : "password"}
@@ -97,6 +96,7 @@ const Login = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    position: "relative",
                   }}
                 >
                   <img
@@ -107,7 +107,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
-            <p className="link" style={{ textDecoration: "underline", marginBottom: "2vh" }} onClick={handleForgotPassword}>
+            <p className="link" style={{ textDecoration: "underline", marginBottom: "2vh" }} onClick={handleForgotPasswordClick}>
               Forgot your password?
             </p>
             <div onClick={handleLoginSubmit} className="loginButt">

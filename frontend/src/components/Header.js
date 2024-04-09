@@ -32,7 +32,7 @@ const Header = () => {
     <div className="rect">
       <div id="iconPicContainer">
         <Link to="/">
-          <img src={icon} />
+          <img src={icon} alt="logo icon" />
         </Link>
       </div>
 

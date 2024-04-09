@@ -6,17 +6,23 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CapsuleList from "./pages/CapsuleList";
 import CapsuleInfo from "./pages/CapsuleInfo";
 import { AuthProvider } from "./contexts/authContext";
+import PrivateRoutes from "./components/ProtectedRoutes";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" Component={Login} />
-          <Route path="/signup" Component={Signup} />
-          <Route path="/" exact Component={Home} />
-          <Route path="/capsules" Component={CapsuleList} />
-          <Route path="/capsules/:id" Component={CapsuleInfo} />
+          <Route element={<PrivateRoutes />}>
+            
+            <Route path="/" exact element={<Home />} />
+            <Route path="/capsules" element={<CapsuleList />} />
+            <Route path="/capsules/:id" element={<CapsuleInfo />} />
+          </Route>
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
     </AuthProvider>
