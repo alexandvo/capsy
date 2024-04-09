@@ -6,6 +6,7 @@ import {
   updatePassword,
   // signInWithPopup,
   signInWithRedirect,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -19,7 +20,7 @@ export const doSignInWithEmailAndPassword = async (email, password) => {
 
 export const doSignInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithRedirect(auth, provider);
+  const result = await signInWithPopup(auth, provider);
   //result.user is the user object
   return result;
 };
