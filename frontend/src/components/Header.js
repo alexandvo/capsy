@@ -1,9 +1,12 @@
 import "../stylesheets/header.css";
 import icon from "../assets/imgs/time-capsule-icon.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { doSignOut } from "../firebase/auth";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const profilePicRef = useRef(null);
@@ -46,7 +49,7 @@ const Header = () => {
         <div id="dropdown" ref={dropdownRef}>
           <Link to="/capsules" className="options">Capsules</Link>
           <Link to="/settings" className="options">Settings</Link>
-          <Link className="options">Logout</Link>
+          <div onClick={() => {doSignOut().then(() => { navigate('/login')})}} className="options">Logout</div>
         </div>
       )}
     </div>
