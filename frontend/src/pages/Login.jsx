@@ -10,8 +10,8 @@ import {
   // doPasswordReset,
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
-} from "../../src/firebase/auth";
-import { useAuth } from "../../src/contexts/authContext";
+} from "../firebase/auth";
+import { useAuth } from "../contexts/authContext";
 import google from "../assets/imgs/google.png"
 // import { auth } from "../firebase/firebase";
 
@@ -100,7 +100,7 @@ const Login = () => {
                   }}
                 >
                   <img
-                    style={{opacity: "50%", width: "30px", position: "absolute" }}
+                    style={{opacity: "50%", width: "30px", position: "absolute", cursor: "pointer" }}
                     src={showingPassword ? closeEye : openEye}
                     alt="password visibility icon"
                   />

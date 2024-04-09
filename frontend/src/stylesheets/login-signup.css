@@ -70,6 +70,7 @@
   -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
   -moz-user-select: none; /* Mozilla Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
+  cursor: pointer;
 }
 
 .authDivider {
@@ -113,6 +114,7 @@
   -webkit-user-select: none; /* WebKit (Safari, Chrome) browsers */
   -moz-user-select: none; /* Mozilla Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
+  cursor: pointer;
 }
 
 .loginContainer p {

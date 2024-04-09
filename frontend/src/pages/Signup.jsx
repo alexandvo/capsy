@@ -83,7 +83,7 @@ const Signup = () => {
                   }}
                 >
                   <img
-                    style={{position: "absolute", opacity: "50%", width: "30px" }}
+                    style={{position: "absolute", opacity: "50%", width: "30px", cursor: "pointer" }}
                     src={showingPassword ? closeEye : openEye}
                     alt="password visibility icon"
                   />

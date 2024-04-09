@@ -1,5 +1,4 @@
 import "../stylesheets/login-signup.css";
-import logoIcon from "../assets/imgs/time-capsule-icon.png";
 import "../stylesheets/global.css";
 import { Link, Navigate } from "react-router-dom";
 import { useRef, useState } from "react";
@@ -40,7 +39,6 @@ const ForgotPassword = () => {
             justifyContent: "center",
           }}
         >
-          <img src={logoIcon} className="logo" alt="logo" />
           <div className="loginContainer">
             <h1>{emailSent ? "Email sent" : "Forgot password?"}</h1>
             <p style={{ marginBottom: "30px" }}>
