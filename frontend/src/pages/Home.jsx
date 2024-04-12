@@ -6,6 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ContentItem from "../components/ContentItem";
+import CapsuleListItem from "../../src/components/CapsuleListItem";
+import plusButton from '../assets/imgs/plus-button.png'
 
 // import CapsuleList from "./CapsuleList";
 // import CapsuleInfo from "./CapsuleInfo";
@@ -36,7 +38,6 @@ const Home = () => {
   }
 
   const expandDesc = () => {
-    
     setShowExpandedDesc(true);
   };
   const minimizeDesc = () => {
@@ -44,7 +45,7 @@ const Home = () => {
   };
   const handleDescChange = (event) => {
     setDescription(event.target.value);
-  }
+  };
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -134,7 +135,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <input
+      {/* <input
         type="file"
         ref={fileInputRef}
         style={{ display: "none" }}
@@ -148,10 +149,8 @@ const Home = () => {
         style={{ display: "none" }}
         accept="image/*"
         onChange={handleCoverChange}
-      />
-      {/* <CapsuleInfo />     */}
-      {/* <CapsuleList /> */}
-      <div id="mainAreaContainer">
+      /> */}
+      {/* <div id="mainAreaContainer">
         {showForm ? (
           <div id="formBoxWrapper">
             <div id="formBox">
@@ -208,16 +207,16 @@ const Home = () => {
               <div id="createButton">
                 <h1>Create Time Capsule</h1>
               </div>
-
-              {/* <div
+              <div
                 id="minButton"
+                style={{right: '5px', top: '5px'}}
                 onClick={() => {
                   setShowForm(true);
                 }}
               >
                 <div className="crossPiece"></div>
                 <div className="crossPiece"></div>
-              </div> */}
+              </div>
               {showExpandedDesc && <textarea id="eDesc" placeholder="Type notes here..." ref={expendedDescRef} value={description ? description : ""} onChange={handleDescChange}></textarea>}
             </div>
             {showExpandedDesc && (
@@ -251,6 +250,29 @@ const Home = () => {
             </div>
           </div>
         )}
+      </div> */}
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+        <CapsuleListItem />
+      </div>
+      <div id="plusButton">
+        <img style={{width: '100%'}} src={plusButton} alt="plus button" />
       </div>
     </Layout>
   );

@@ -29,7 +29,7 @@ const Header = () => {
     };
   }, []);
   return (
-    <div className="rect">
+    <div className='rect'>
       <div id="iconPicContainer">
         <Link to="/">
           <img src={icon} alt="logo icon" />
@@ -47,7 +47,6 @@ const Header = () => {
       </div>
       {showDropdown && (
         <div id="dropdown" ref={dropdownRef}>
-          <Link to="/capsules" className="options">Capsules</Link>
           <Link to="/settings" className="options">Settings</Link>
           <div onClick={() => {doSignOut().then(() => { navigate('/login')})}} className="options">Logout</div>
         </div>

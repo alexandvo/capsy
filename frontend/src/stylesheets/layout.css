@@ -6,10 +6,17 @@
 
 #mainArea {
     width: 100%;
+    height: 88vh;
+    overflow-y: auto;
+    margin-top: 12vh;
 }
 
 @media (min-height: 600px) {
     #fullscreen {
         padding-top: 80px;
+    }
+    #mainArea {
+        height: calc(100vh - 80px);
+        margin-top: 80px;
     }
 }

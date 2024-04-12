@@ -10,7 +10,10 @@
   border-bottom: 1px solid var(--sup);
   background-color: white;
   z-index: 20;
+  top: 0;
 }
+
+
 
 .rect img {
   width: 50px;
@@ -63,7 +66,7 @@
   border-radius: 20px;
   border: 2px solid var(--sup);
   position: absolute;
-  height: 130px;
+  height: 80px;
   top: calc(12vh + 10px);
   right: 10px;
   display: flex;
