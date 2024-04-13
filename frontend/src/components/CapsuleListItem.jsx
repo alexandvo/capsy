@@ -1,7 +1,12 @@
 import "../stylesheets/global.css";
 import "../stylesheets/capsuleListItem.css";
 
-const CapsuleListItem = ({ title = "Title", desc = "Desc", date = "Date" }) => {
+const CapsuleListItem = ({ title = "Title", date = "Date"}) => {
+  const currentDate = new Date();
+  const selectedDate = new Date(date);
+  if (currentDate >= selectedDate) {
+    date = "Open now!"
+  }
   return (
     <div id="mainWrapper">
       <div id="picContainer">
