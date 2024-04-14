@@ -6,11 +6,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import ContentItem from "../components/ContentItem";
 
 import useWindowDimensions from "../useWindow";
+import { getAuth } from "firebase/auth";
 
 const CreateForm = ({ setShow }) => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
   const titleRef = useRef();
+
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
 
   const { height, width } = useWindowDimensions();
 
@@ -34,12 +38,8 @@ const CreateForm = ({ setShow }) => {
   }
 
   const handleCreateCapsule = () => {
-    const title = titleRef.current.value;
-    //extract cover file if exists and place into the cover file folder and name the cover file the same as capsule id
-    //place all other files into firebase storage in its own folder and have the folder name be the id of the capsule it belongs to
-    //store into postgres the title, description (notes), date, url path to cover file if exists, url path to the folder with all the content, and also the current user's id
-
-  }
+    
+  };
 
   const expandDesc = () => {
     setShowExpandedDesc(true);
@@ -209,7 +209,7 @@ const CreateForm = ({ setShow }) => {
                 )}
               </div>
             </div>
-            <div id="createButton">
+            <div id="createButton" onClick={handleCreateCapsule}>
               <h1>Create Time Capsule</h1>
             </div>
             <div

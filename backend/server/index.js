@@ -2,14 +2,19 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const multer = require("multer");
 
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./capsy-4e418-firebase-adminsdk-v0xvu-f14fb66dd8.json");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "gs://capsy-4e418.appspot.com",
 });
+
+const bucket = admin.storage().bucket();
+const upload = multer();
 
 //middleware
 app.use(cors());
@@ -17,33 +22,67 @@ app.use(express.json());
 
 const verifyToken = async (req, res, next) => {
   try {
-    const idToken = req.headers.authorization.split('Bearer ')[1];
+    const idToken = req.headers.authorization.split("Bearer ")[1];
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     req.user = decodedToken;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Unauthorized' });
+    res.status(401).json({ error: "Unauthorized" });
   }
 };
 
 //ROUTES
 
 //create a capsule
+app.post(
+  "/capsules",
+  verifyToken,
+  // upload.array("content"),
+  async (req, res) => {
+    try {
+      const files = req.files;
+      const coverFile = req.files[0];
+      if (!files || files.length === 0) {
+        return res.status(400).json({ error: "No files provided" });
+      }
+      const folderName = "capsules";
+      const { uid } = req.user;
+      const { title, notes, opendate } = req.body;
+      const newCapsule = await pool.query(
+        "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
+        [title, notes, opendate, uid]
+      );
 
-app.post("/capsules", verifyToken, async (req, res) => {
-  try {
-    const {uid} = req.user;
-    const { title, notes, opendate, cover_url, contents} =
-      req.body;
-    const newCapsule = await pool.query(
-      "INSERT INTO capsules (title, notes, opendate, cover_url, contents, creator_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [title, notes, opendate, cover_url, contents, uid]
-    );
-    res.json(newCapsule.rows[0]);
-  } catch (err) {
-    console.error(err.message);
+      const subFolderName = newCapsule.rows[0].capsule_id;
+
+      if (coverFile) {
+        const blob = bucket.file(`covers/${subFolderName}`);
+        const blobStream = blob.createWriteStream({
+          metadata: {
+            contentType: 'image/' + coverFile.originalname.split('.').pop()
+          }
+        });
+        blobStream.end(coverFile.buffer);
+      }
+
+      for (const file of files.slice(1)) {
+        const fileName = file.originalname;
+        const blob = bucket.file(`${folderName}/${subFolderName}/${fileName}`);
+        const blobStream = blob.createWriteStream();
+
+        blobStream.on("error", (err) => {
+          console.error("Error uploading file:", err);
+        });
+
+        blobStream.end(file.buffer);
+      }
+
+      res.json(newCapsule.rows[0]);
+    } catch (err) {
+      console.error(err.message);
+    }
   }
-});
+);
 
 //get all capsules
 

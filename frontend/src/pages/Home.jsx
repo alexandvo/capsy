@@ -18,21 +18,18 @@ const Home = () => {
   const [showForm, setShowForm] = useState(false);
   const [capsulesData, setCapsulesData] = useState([]);
 
-  const showIdToken = false;
+  const showIdToken = true;
 
-  async function getCurrentUserIdToken() {
-    return await currentUser.getIdToken(true)
-  }
 
   //show current user idtoken
   useEffect(() => {
     if (showIdToken) {
-      console.log(getCurrentUserIdToken());
+      currentUser.getIdToken(true).then((idToken) => {console.log(idToken)});
     }
   }, []);
 
   useEffect(() => {
-    getCurrentUserIdToken().then((idToken) => {
+    currentUser.getIdToken(true).then((idToken) => {
       fetch("http://localhost:5000/capsules", {
         method: "GET",
         headers: {
