@@ -3,10 +3,16 @@ import icon from "../assets/imgs/time-capsule-icon.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { doSignOut } from "../firebase/auth";
+import { useAuth } from "../contexts/authContext";
+import { getAuth } from "firebase/auth";
 
 const Header = () => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
   const navigate = useNavigate();
 
+  const [headerTitle, setHeaderTitle] = useState("Capsy");
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const profilePicRef = useRef(null);
@@ -24,19 +30,20 @@ const Header = () => {
 
     document.addEventListener("click", handleClickOutside);
 
+
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
   return (
-    <div className='rect'>
+    <div className="rect">
       <div id="iconPicContainer">
         <Link to="/">
           <img src={icon} alt="logo icon" />
         </Link>
       </div>
 
-      <h1>Capsy</h1>
+      <h1>{headerTitle}</h1>
       <div
         id="profilePicContainer"
         onClick={() => {
@@ -47,8 +54,19 @@ const Header = () => {
       </div>
       {showDropdown && (
         <div id="dropdown" ref={dropdownRef}>
-          <Link to="/settings" className="options">Settings</Link>
-          <div onClick={() => {doSignOut().then(() => { navigate('/login')})}} className="options">Logout</div>
+          <Link to="/settings" className="options">
+            Settings
+          </Link>
+          <div
+            onClick={() => {
+              doSignOut().then(() => {
+                navigate("/login");
+              });
+            }}
+            className="options"
+          >
+            Logout
+          </div>
         </div>
       )}
     </div>

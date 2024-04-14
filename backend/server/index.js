@@ -3,21 +3,41 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./capsy-4e418-firebase-adminsdk-v0xvu-f14fb66dd8.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 //middleware
 app.use(cors());
 app.use(express.json());
+
+const verifyToken = async (req, res, next) => {
+  try {
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
 
 //ROUTES
 
 //create a capsule
 
-app.post("/capsules", async (req, res) => {
+app.post("/capsules", verifyToken, async (req, res) => {
   try {
-    const { title, notes, opendate, cover_url, contents, creator_id } =
+    const {uid} = req.user;
+    const { title, notes, opendate, cover_url, contents} =
       req.body;
     const newCapsule = await pool.query(
       "INSERT INTO capsules (title, notes, opendate, cover_url, contents, creator_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [title, notes, opendate, cover_url, contents, creator_id]
+      [title, notes, opendate, cover_url, contents, uid]
     );
     res.json(newCapsule.rows[0]);
   } catch (err) {
@@ -27,12 +47,12 @@ app.post("/capsules", async (req, res) => {
 
 //get all capsules
 
-app.get("/capsules", async (req, res) => {
+app.get("/capsules", verifyToken, async (req, res) => {
   try {
-    const { creator_id } = req.body;
+    const { uid } = req.user;
     const capsulesList = await pool.query(
       "SELECT * FROM capsules WHERE creator_id = $1",
-      [creator_id]
+      [uid]
     );
     res.json(capsulesList.rows);
   } catch (err) {
@@ -42,13 +62,13 @@ app.get("/capsules", async (req, res) => {
 
 //get a capsule
 
-app.get("/capsules/:id", async (req, res) => {
+app.get("/capsules/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { creator_id } = req.body;
+    const { uid } = req.user;
     const capsule = await pool.query(
       "SELECT * FROM capsules WHERE creator_id = $1 AND capsule_id = $2",
-      [creator_id, id]
+      [uid, id]
     );
     res.json(capsule.rows[0]);
   } catch (err) {
@@ -58,7 +78,7 @@ app.get("/capsules/:id", async (req, res) => {
 
 //update a capsule
 
-app.put("/capsules/:id", async (req, res) => {
+app.put("/capsules/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { cover_url, title } = req.body;
@@ -75,7 +95,7 @@ app.put("/capsules/:id", async (req, res) => {
 
 //delete a capsule
 
-app.delete("/capsules/:id", async (req, res) => {
+app.delete("/capsules/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const capsule = await pool.query(
@@ -116,7 +136,7 @@ app.get("/users", async (req, res) => {
 
 //get a user
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
@@ -130,7 +150,7 @@ app.get("/users/:id", async (req, res) => {
 
 //update a user
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { email, pfp_url } = req.body;
@@ -144,7 +164,7 @@ app.put("/users/:id", async (req, res) => {
   }
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const user = await pool.query(
