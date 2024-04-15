@@ -192,7 +192,7 @@ app.get("/capsules", verifyToken, async (req, res) => {
   try {
     const { uid } = req.user;
     const capsulesList = await pool.query(
-      "SELECT * FROM capsules WHERE creator_id = $1 ORDER BY opendate",
+      "SELECT * FROM capsules WHERE creator_id = $1 ORDER BY CASE WHEN unlocked = true THEN 2 ELSE 1 END, opendate",
       [uid]
     );
     res.json(capsulesList.rows);
@@ -217,15 +217,14 @@ app.get("/capsules/:id", verifyToken, async (req, res) => {
   }
 });
 
-//update a capsule
+//update a capsule to be unlocked
 
 app.put("/capsules/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { cover_url, title } = req.body;
     const capsule = await pool.query(
-      "UPDATE capsules SET cover_url = $1, title = $2 WHERE capsule_id = $3 RETURNING *",
-      [cover_url, title, id]
+      "UPDATE capsules SET unlocked = $1 WHERE capsule_id = $2 RETURNING *",
+      [true, id]
     );
     // res.json(`Capsule id: ${id} created by User id: ${creator_id} creator_id was updated.`);
     res.json(capsule.rows[0]);

@@ -54,13 +54,16 @@ const Home = () => {
               try {
                 const url = await getDownloadURL(imgRef);
                 return {
+                  id: el.capsule_id,
                   title: el.title,
+                  unlocked: el.unlocked,
                   date: dateFromDB.toLocaleDateString(),
                   coverUrl: url,
                 };
               } catch (error) {
                 console.error("Error fetching image URL:", error);
                 return {
+                  id: el.capsule_id,
                   title: el.title,
                   date: dateFromDB.toLocaleDateString(),
                   coverUrl: "",
@@ -93,6 +96,8 @@ const Home = () => {
             title={item.title}
             date={item.date}
             coverUrl={item.coverUrl}
+            id={item.id}
+            unlocked={item.unlocked}
           />
         ))}
       </div>

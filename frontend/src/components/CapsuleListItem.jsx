@@ -1,15 +1,20 @@
 import "../stylesheets/global.css";
 import "../stylesheets/capsuleListItem.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CapsuleListItem = ({ title = "Title", date = "Date", coverUrl }) => {
+const CapsuleListItem = ({ id, title = "Title", date = "Date", coverUrl , unlocked}) => {
   const currentDate = new Date();
   const selectedDate = new Date(date);
   const [isWide, setIsWide] = useState(false);
+
+  const navigate = useNavigate();
   if (currentDate >= selectedDate) {
     date = "Open now!";
   }
-  
+  if (unlocked) {
+    date = "Opened"
+  }
 
   const handleImageLoad = (event) => {
     const img = event.target;
@@ -20,7 +25,12 @@ const CapsuleListItem = ({ title = "Title", date = "Date", coverUrl }) => {
     }
   };
   return (
-    <div id="mainWrapper">
+    <div
+      id="mainWrapper"
+      onClick={() => {
+        navigate(`/${id}`);
+      }}
+    >
       <div id="picContainer">
         <img
           onLoad={handleImageLoad}

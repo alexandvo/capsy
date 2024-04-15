@@ -40,7 +40,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
   }
 
   const handleCreateCapsule = async () => {
-    if (!titleRef.current.value || !date || !selectedFiles || !coverBeenSet) {
+    if (!titleRef.current.value || !date || selectedFiles.length < 2 || !coverBeenSet) {
       window.alert('Capsule must have at least a title, cover, content, and date');
       return;
     }
@@ -201,7 +201,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
             >
               {width >= 1000 ? (
                 <textarea
-                  placeholder="Notes"
+                  placeholder="Note to self..."
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);

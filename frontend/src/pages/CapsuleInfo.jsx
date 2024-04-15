@@ -4,28 +4,200 @@ import lock from "../assets/imgs/locked.png";
 import edit from "../assets/imgs/edit.png";
 import del from "../assets/imgs/delete.png";
 import Layout from "../components/Layout";
+import { useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { getDownloadURL, ref, listAll, getMetadata } from "firebase/storage";
+import { fstorage } from "../firebase/firebase";
+import { getAuth } from "firebase/auth";
+import ResizingImage from "../components/ResizingImage";
 
-const CapsuleInfo = ({
-  desc = "Description",
-  title = "Title",
-  unlockable = false,
-}) => {
+const CapsuleInfo = ({}) => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  const [capTitle, setCapTitle] = useState("");
+  const [capNotes, setCapNotes] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [opened, setOpened] = useState(false);
+  const [coverUrl, setCoverUrl] = useState();
+  const [openDate, setOpenDate] = useState();
+  const [capFileObjs, setCapFileObjs] = useState([]);
+  const [rerender, setRerender] = useState(false);
+
+  const [isWide, setIsWide] = useState(false);
+
+  const { id } = useParams();
+
+  const folderRef = ref(fstorage, `/capsules/${id}`);
+
+  async function handleOpenLock() {
+    if (new Date() < openDate) {
+      return;
+    }
+    try {
+      const idToken = await currentUser.getIdToken(true);
+      await fetch(`http://localhost:5000/capsules/${id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+    setRerender(!rerender);
+  }
+
+  async function getFiles() {
+    const files = await listAll(folderRef);
+      // Get download URLs and file types for all files in the folder
+      const urls = await Promise.all(
+        files.items.map(async (item) => {
+          const url = await getDownloadURL(item);
+          const metadata = await getMetadata(item);
+          const contentType = metadata.contentType;
+          return { url, type: contentType };
+        })
+      );
+
+      setCapFileObjs(urls);
+  }
+
+
+  async function fetchCapsule() {
+    try {
+      const idToken = await currentUser.getIdToken(true);
+      const capsuleRes = await fetch(`http://localhost:5000/capsules/${id}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+      let capsule;
+      if (!capsuleRes.ok) {
+        throw new Error("Network response was not ok");
+      } else {
+        capsule = await capsuleRes.json();
+      }
+      const { title, notes, opendate, creator_id, unlocked } = capsule;
+      const imgRef = ref(fstorage, `covers/${id}`);
+      const url = await getDownloadURL(imgRef);
+      setCoverUrl(url);
+      setCapTitle(title);
+      setCapNotes(notes);
+      setOpenDate(new Date(opendate));
+      
+
+      if (unlocked) {
+        //show everything and render from firebase
+        await getFiles();
+        setOpened(true);
+      }
+
+    } catch (err) {
+      console.error(err.message);
+    }
+
+    setLoading(false);
+  }
+
+  const handleImageLoad = (event) => {
+    const img = event.target;
+    if (img.naturalWidth > img.naturalHeight) {
+      setIsWide(true);
+    } else {
+      setIsWide(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCapsule();
+  }, [rerender]);
+
+
+
+  // Function to toggle the shaking animation
+  const toggleShake = () => {
+
+    // After a short delay, stop the shaking animation
+    setTimeout(() => {
+    }, 1000); // Adjust the duration of the animation as needed
+  };
+
+  // Effect to trigger the shaking animation at random intervals
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Randomly decide whether to shake the image
+      if (Math.random() > 0.5) {
+        toggleShake();
+      }
+    }, 2000); // Adjust the interval between shakes as needed
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures the effect runs only once
+
 
   return (
     <Layout>
-      <div id="mainContainer">
-        <div id="pfpWrap"></div>
-        <div id="buttonWrap">
-          <img id="edit" src={edit} alt="edit" />
-          <img id="del" src={del} alt="delete" />
+      {!loading && (
+        <div id="mainContainer">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+            id="pfpWrap"
+          >
+            <img
+              onLoad={handleImageLoad}
+              style={{
+                height: isWide ? "100%" : "auto",
+                width: isWide ? "auto" : "100%",
+              }}
+              src={coverUrl}
+              alt="capsule cover"
+            />
+          </div>
+          <div id="buttonWrap">
+            <img id="del" src={del} alt="delete" />
+          </div>
+          <h1>{capTitle}</h1>
+          {opened && <p style={{paddingLeft: '8vw',paddingRight: '8vw', marginTop: '20px', marginBottom: '50px'}}>{capNotes}</p>}
+          {!opened && (
+            <>
+              <p id="status">{new Date() >= openDate ? "Unlockable Now!" : "Locked"}</p>
+              <img id="lock" src={lock} alt="lock" onClick={handleOpenLock} className={new Date() >= openDate ? "shake" : ''}/>
+            </>
+          )}
+          {opened && (
+            <div id="unlockedContainer">
+              {capFileObjs.map((file, index) => (
+                <React.Fragment key={index}>
+                  {file.type.startsWith("image/") && (
+                    // <img src={file.url} alt={`Image ${index}`} />
+                    <ResizingImage
+                      src={file.url}
+                      alt="image file"
+                      size={300}
+                    />
+                  )}
+                  {file.type.startsWith("video/") && (
+                    <video src={file.url} controls />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
         </div>
-        <h1>{title}</h1>
-        <p>{desc}</p>
-        <p id="status">{unlockable ? "Unlockable Now!" : "Locked"}</p>
-        <img id="lock" src={lock} alt="lock" />
-      </div>
+      )}
     </Layout>
   );
 };
 
 export default CapsuleInfo;
+
+{
+  /* <div style={{width: '100px', height: '100px', backgroundColor: 'red'}}></div> */
+}
