@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { doSignOut } from "../firebase/auth";
 import { useAuth } from "../contexts/authContext";
 import { getAuth } from "firebase/auth";
+import cog from "../assets/imgs/settings-cog.png";
 
 const Header = () => {
   const auth = getAuth();
@@ -30,7 +31,6 @@ const Header = () => {
 
     document.addEventListener("click", handleClickOutside);
 
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
@@ -39,7 +39,7 @@ const Header = () => {
     <div className="rect">
       <div id="iconPicContainer">
         <Link to="/">
-          <img src={icon} alt="logo icon" />
+          <img id="logoIcon" src={icon} alt="logo icon" />
         </Link>
       </div>
 
@@ -50,7 +50,13 @@ const Header = () => {
           setShowDropdown(!showDropdown);
         }}
       >
-        <div id="pfpCir" ref={profilePicRef}></div>
+        <img
+          id="pfpCir"
+          style={{display: 'block', width: "60%", height: "60%"}}
+          src={cog}
+          ref={profilePicRef}
+          alt="settings"
+        />
       </div>
       {showDropdown && (
         <div id="dropdown" ref={dropdownRef}>

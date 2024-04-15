@@ -10,6 +10,8 @@ import CapsuleListItem from "../../src/components/CapsuleListItem";
 import plusButton from "../assets/imgs/plus-button.png";
 import CreateForm from "../components/CreateForm";
 import { getAuth } from "firebase/auth";
+import { getDownloadURL, ref } from "firebase/storage";
+import { fstorage } from "../firebase/firebase";
 
 const Home = () => {
   const auth = getAuth();
@@ -17,14 +19,16 @@ const Home = () => {
 
   const [showForm, setShowForm] = useState(false);
   const [capsulesData, setCapsulesData] = useState([]);
+  const [rerender, setRerender] = useState(false);
 
   const showIdToken = true;
-
 
   //show current user idtoken
   useEffect(() => {
     if (showIdToken) {
-      currentUser.getIdToken(true).then((idToken) => {console.log(idToken)});
+      currentUser.getIdToken(true).then((idToken) => {
+        console.log(idToken);
+      });
     }
   }, []);
 
@@ -43,17 +47,35 @@ const Home = () => {
           return response.json();
         })
         .then((data) => {
-          const capsuleObjList = data.map((el) => {
-            const dateFromDB = new Date(el.opendate);
-            return { title: el.title, date: dateFromDB.toLocaleDateString()};
+          Promise.all(
+            data.map(async (el) => {
+              const dateFromDB = new Date(el.opendate);
+              const imgRef = ref(fstorage, `covers/${el.capsule_id}`);
+              try {
+                const url = await getDownloadURL(imgRef);
+                return {
+                  title: el.title,
+                  date: dateFromDB.toLocaleDateString(),
+                  coverUrl: url,
+                };
+              } catch (error) {
+                console.error("Error fetching image URL:", error);
+                return {
+                  title: el.title,
+                  date: dateFromDB.toLocaleDateString(),
+                  coverUrl: "",
+                };
+              }
+            })
+          ).then((capsuleObjList) => {
+            setCapsulesData(capsuleObjList);
           });
-          setCapsulesData(capsuleObjList);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     });
-  }, []);
+  }, [rerender]);
 
   return (
     <Layout>
@@ -70,6 +92,7 @@ const Home = () => {
             key={index}
             title={item.title}
             date={item.date}
+            coverUrl={item.coverUrl}
           />
         ))}
       </div>
@@ -83,15 +106,37 @@ const Home = () => {
           alt="plus button"
         />
       </div>
+
       {showForm && (
         <div
           id="formBG"
           onClick={() => {
+            setRerender(!rerender);
             setShowForm(false);
           }}
         ></div>
       )}
-      {showForm && <CreateForm setShow={setShowForm} />}
+      {showForm && (
+        <CreateForm
+          setShow={setShowForm}
+          setRerender={setRerender}
+          rerender={rerender}
+        />
+      )}
+      {capsulesData.length === 0 && (<div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          bottom: 0,
+          zIndex: -10,
+          position: "absolute",
+        }}
+      >
+        <p>No capsules yet...</p>
+      </div>)}
     </Layout>
   );
 };

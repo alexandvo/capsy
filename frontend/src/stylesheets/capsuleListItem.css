@@ -26,6 +26,10 @@
 #picContainer {
   grid-row: 1 / 2;
   grid-column: 1 / 2 ;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #titleWrapper {
@@ -64,7 +68,7 @@
   aspect-ratio: 1 / 1;
   border-radius: 2vw;
   /* margin-left: 2vw; */
-  background-color: orange;
+  /* background-color: orange; */
 }
 
 #plusButton {

@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const http = require("http");
 const multer = require("multer");
+const Busboy = require("busboy");
 
 var admin = require("firebase-admin");
 
@@ -13,12 +15,19 @@ admin.initializeApp({
   storageBucket: "gs://capsy-4e418.appspot.com",
 });
 
+// const storage = multer.memoryStorage(); // Store files in memory (you can also specify diskStorage to store on disk)
+
+// Initialize multer middleware
+const upload = multer({
+  // storage: storage,
+});
+
 const bucket = admin.storage().bucket();
-const upload = multer();
 
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -38,20 +47,27 @@ app.post(
   "/capsules",
   verifyToken,
   // upload.array("content"),
+  upload.any(),
   async (req, res) => {
     try {
+      
       const files = req.files;
       const coverFile = req.files[0];
+      const folderName = "capsules";
       if (!files || files.length === 0) {
         return res.status(400).json({ error: "No files provided" });
       }
-      const folderName = "capsules";
+      
       const { uid } = req.user;
       const { title, notes, opendate } = req.body;
+      const newDate = new Date(opendate);
+      
+      
       const newCapsule = await pool.query(
         "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
-        [title, notes, opendate, uid]
+        [title, notes, newDate, uid]
       );
+
 
       const subFolderName = newCapsule.rows[0].capsule_id;
 
@@ -84,13 +100,99 @@ app.post(
   }
 );
 
+// app.post("/capsules", verifyToken, (req, res) => {
+//   try {
+//     if (
+//       req.headers["content-type"] &&
+//       req.headers["content-type"].includes("multipart/form-data")
+//     ) {
+//       const busboy = Busboy({ headers: req.headers });
+
+//       let title,
+//         notes,
+//         opendate,
+//         files = [];
+
+//       const { uid } = req.user;
+
+//       busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+//         files.push({ fieldname, file, filename, encoding, mimetype });
+//       });
+
+//       busboy.on("field", (fieldname, value) => {
+//         if (fieldname === "title") title = value;
+//         else if (fieldname === "notes") notes = value;
+//         else if (fieldname === "opendate") opendate = new Date(value);
+//         else if (fieldname === 'content') {
+//           const contentArray = JSON.parse(value);
+//           // Assuming cover file is the first element in the content array
+        
+//           // Insert cover file at the beginning of the files array
+     
+//           // Add the rest of the files from contentArray to files array
+//           files.push(...contentArray);
+//         }
+//       });
+
+//       busboy.on("finish", async () => {
+//         console.log("Busboy parsing finished");
+//         console.log(files);
+
+//         // Your database insertion logic here
+//         const newCapsule = await pool.query(
+//           "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
+//           [title, notes, opendate, uid]
+//         );
+
+//         const folderName = "capsules";
+//         const subFolderName = newCapsule.rows[0].capsule_id;
+//         const coverFile = files[0];
+
+//         if (coverFile) {
+//           const blob = bucket.file(`covers/${subFolderName}`);
+//           const blobStream = blob.createWriteStream({
+//             metadata: {
+//               contentType: coverFile.mimetype,
+//             },
+//           });
+//           blobStream.end(coverFile.buffer);
+//         }
+
+//         for (const file of files.slice(1)) {
+//           const fileName = file.originalname;
+//           const blob = bucket.file(
+//             `${folderName}/${subFolderName}/${fileName}`
+//           );
+//           const blobStream = blob.createWriteStream();
+
+//           blobStream.on("error", (err) => {
+//             console.error("Error uploading file:", err);
+//           });
+
+//           blobStream.end(file.buffer);
+//         }
+
+//         res.status(200).json({ success: true });
+//       });
+
+//       req.pipe(busboy); // Pipe the request stream into Busboy
+//     } else {
+//       // If the request is not multipart/form-data, handle accordingly
+//       res.status(400).json({ error: "Invalid request format" });
+//     }
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
 //get all capsules
 
 app.get("/capsules", verifyToken, async (req, res) => {
   try {
     const { uid } = req.user;
     const capsulesList = await pool.query(
-      "SELECT * FROM capsules WHERE creator_id = $1",
+      "SELECT * FROM capsules WHERE creator_id = $1 ORDER BY opendate",
       [uid]
     );
     res.json(capsulesList.rows);

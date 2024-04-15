@@ -4,11 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ContentItem from "../components/ContentItem";
+import axios from "axios";
 
 import useWindowDimensions from "../useWindow";
 import { getAuth } from "firebase/auth";
 
-const CreateForm = ({ setShow }) => {
+const CreateForm = ({ setShow, setRerender, rerender }) => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
   const titleRef = useRef();
@@ -23,6 +24,7 @@ const CreateForm = ({ setShow }) => {
   const [date, setDate] = useState(new Date());
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showExpandedDesc, setShowExpandedDesc] = useState(false);
+  const [loading, setLoading] = useState(false);
   const expendedDescRef = useRef();
 
   function handleUploadContentClick() {
@@ -37,7 +39,46 @@ const CreateForm = ({ setShow }) => {
     }
   }
 
-  const handleCreateCapsule = () => {
+  const handleCreateCapsule = async () => {
+    if (!titleRef.current.value || !date || !selectedFiles || !coverBeenSet) {
+      window.alert('Capsule must have at least a title, cover, content, and date');
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("title", titleRef.current.value);
+      formData.append("notes", description);
+      formData.append("opendate", date);
+      selectedFiles.forEach((item) => {
+        formData.append("content", item.rawFile);
+      });
+
+      currentUser.getIdToken(true).then(async (idToken) => {
+        setLoading(true);
+        const response = await axios.post(
+          "http://localhost:5000/capsules",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+              "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
+            },
+          }
+        );
+        setLoading(false);
+        titleRef.current.value = '';
+        setDescription('');
+        setDate(new Date());
+        setSelectedFiles([]);
+        
+      }).catch((e) => {
+        setLoading(false);
+        console.error(e.message);
+      }) 
+    } catch (error) {
+      setLoading(false);
+      console.error(error.message);
+    }
     
   };
 
@@ -45,6 +86,7 @@ const CreateForm = ({ setShow }) => {
     setShowExpandedDesc(true);
   };
   const minimizeDesc = () => {
+    
     setShowExpandedDesc(false);
   };
   const handleDescChange = (event) => {
@@ -216,6 +258,7 @@ const CreateForm = ({ setShow }) => {
               id="minButton"
               style={{ right: "8px", top: "8px" }}
               onClick={() => {
+                setRerender(!rerender);
                 setShow(false);
               }}
             >
@@ -242,6 +285,14 @@ const CreateForm = ({ setShow }) => {
           )}
         </div>
       </div>
+      {loading && (<div
+        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
+      >
+        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
+        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
+        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Creating...</p>
+      </div>)}
+      
     </>
   );
 };

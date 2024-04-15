@@ -25,6 +25,7 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
       )}
       {file.type.startsWith("video/") && (
         <video
+        controls
           style={{ width: "auto", height: "100%" }}
           src={URL.createObjectURL(file)}
           alt={file.name}
