@@ -21,7 +21,7 @@ const Home = () => {
   const [capsulesData, setCapsulesData] = useState([]);
   const [rerender, setRerender] = useState(false);
 
-  const showIdToken = true;
+  const showIdToken = false;
 
   //show current user idtoken
   useEffect(() => {

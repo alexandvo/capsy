@@ -119,7 +119,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.type.startsWith("image/")) {
+      if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
         const fileObj = {
           rawFile: file,
           isCover: false,
@@ -129,7 +129,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         window.alert(
           "Unsupported file type: " +
             file.type +
-            "\nPlease choose images only.",
+            "\nPlease choose images and/or videos only",
           file.type
         );
         event.target.value = null;
@@ -185,7 +185,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         type="file"
         ref={fileInputRef}
         style={{ display: "none" }}
-        accept="image/*"
+        accept="image/*, video/*"
         onChange={handleFileChange}
         multiple
       />

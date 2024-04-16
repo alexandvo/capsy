@@ -50,19 +50,7 @@ app.post(
   upload.any(),
   async (req, res) => {
     try {
-      let totalSize = 0;
-      req.files.forEach((file) => {
-        totalSize += file.size;
-      });
-
-      // Set maximum total size allowed
-      const maxTotalSize = 100 * 1024 * 1024; // Example limit: 50MB
-
-      // Check if total size exceeds the maximum limit
-      if (totalSize > maxTotalSize) {
-        return res.status(400).send("Total file size exceeds the limit.");
-      }
-
+  
       const files = req.files;
       const coverFile = req.files[0];
       const folderName = "capsules";
@@ -172,14 +160,22 @@ app.delete("/capsules/:id", verifyToken, async (req, res) => {
 
 //create a user
 
-app.post("/users", async (req, res) => {
+app.post("/users/:id", async (req, res) => {
   try {
-    const { email, pfp_url } = req.body;
-    const newUser = await pool.query(
-      "INSERT INTO users (email, pfp_url) VALUES ($1, $2) RETURNING *",
-      [email, pfp_url]
+    const { id } = req.params;
+    const { email} = req.body;
+    const existingUser = await pool.query(
+      "SELECT * FROM users WHERE user_id = $1",
+      [id]
     );
-    res.json(newUser.rows[0]);
+    if (!existingUser.rows.length) {
+      const newUser = await pool.query(
+        "INSERT INTO users (user_id, email) VALUES ($1, $2) RETURNING *",
+        [id, email]
+      );
+      res.json(newUser.rows[0]);
+    }
+    
   } catch (err) {
     console.error(err.message);
   }
@@ -198,7 +194,7 @@ app.get("/users", async (req, res) => {
 
 //get a user
 
-app.get("/users/:id", verifyToken, async (req, res) => {
+app.get("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
