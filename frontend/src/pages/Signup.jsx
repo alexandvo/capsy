@@ -26,50 +26,27 @@ const Signup = () => {
   const onSignupSubmit = async () => {
     if (!isRegistering) {
       setIsRegistering(true);
-
       try {
-        const userCredential = await doCreateUserWithEmailAndPassword(emailRef.current.value, passRef.current.value);
-        // Extract user object from user credential
-        const user = userCredential.user;
-        // Access the user's unique ID
-        const userId = user.uid;
-        // Now you can use the userId as needed
-        await fetch(`http://localhost:5000/users/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: user.email }),
-        });
+        await doCreateUserWithEmailAndPassword(emailRef.current.value, passRef.current.value);
       } catch (err) {
+        const errorCode = err.code;
         setIsRegistering(false);
-        setErrorMessage("Password must be at least 6 characters long");
+        if (errorCode === 'auth/invalid-email') {
+          setErrorMessage("Invalid email address");
+        }
+        if (errorCode === 'auth/weak-password') {
+          setErrorMessage("Password must be at least 6 characters");
+        }
       }
     }
-  };
-
+  }
   const onGoogleSignIn = (e) => {
     e.preventDefault();
     if (!isRegistering) {
       setIsRegistering(true);
-      doSignInWithGoogle()
-        .then((userCredential) => {
-          // Access the user object from the user credential
-          const user = userCredential.user;
-          // Access the user's unique ID
-          const userId = user.uid;
-          // Now you can use the userId as needed
-          fetch(`http://localhost:5000/users/${userId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: user.email }),
-          });
-        })
-        .catch((err) => {
-          setIsRegistering(false);
-        });
+      doSignInWithGoogle().catch((err) => {
+        setIsRegistering(false);
+      });
     }
   };
 

@@ -36,45 +36,21 @@ const Login = () => {
     if (!isSigningIn) {
       setIsSigningIn(true);
       try {
-        const userCredential = await doSignInWithEmailAndPassword(emailRef.current.value, passRef.current.value);
-        // Extract user object from user credential
-        const user = userCredential.user;
-        // Access the user's unique ID
-        const userId = user.uid;
-        // Now you can use the userId as needed
-        await fetch(`http://localhost:5000/users/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: user.email }),
-        });
+        await doSignInWithEmailAndPassword(
+          emailRef.current.value,
+          passRef.current.value
+        );
       } catch (err) {
         setIsSigningIn(false);
         setErrorMessage("Incorrect email or password");
       }
     }
   };
-
   const onGoogleSignIn = (e) => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      doSignInWithGoogle().then((userCredential) => {
-        // Access the user object from the user credential
-        const user = userCredential.user;
-        // Access the user's unique ID
-        const userId = user.uid;
-        // Now you can use the userId as needed
-        fetch(`http://localhost:5000/users/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: user.email }),
-        });
-      })
-      .catch((err) => {
+      doSignInWithGoogle().catch((err) => {
         setIsSigningIn(false);
       });
     }

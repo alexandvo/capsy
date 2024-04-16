@@ -94,6 +94,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         })
         .catch((e) => {
           setLoading(false);
+          console.error(e.message);
           window.alert("Total file size may be too large");
         });
     } catch (error) {
@@ -119,7 +120,10 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
+      if (file.type.startsWith("image/")
+      //  || file.type.startsWith("video/")
+      ) 
+      {
         const fileObj = {
           rawFile: file,
           isCover: false,
@@ -129,7 +133,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         window.alert(
           "Unsupported file type: " +
             file.type +
-            "\nPlease choose images and/or videos only",
+            "\nPlease choose images",
           file.type
         );
         event.target.value = null;
@@ -153,7 +157,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
   const handleCoverChange = (event) => {
     const coverFile = event.target.files[0];
-    if (coverFile.type.startsWith("video/")) {
+    if (!coverFile.type.startsWith("image")) {
       window.alert(
         "Unsupported file type: " +
           coverFile.type +
@@ -185,7 +189,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         type="file"
         ref={fileInputRef}
         style={{ display: "none" }}
-        accept="image/*, video/*"
+        accept="image/*"
         onChange={handleFileChange}
         multiple
       />

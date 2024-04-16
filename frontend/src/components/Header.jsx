@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { doSignOut } from "../firebase/auth";
 import { useAuth } from "../contexts/authContext";
 import { getAuth } from "firebase/auth";
-import cog from "../assets/imgs/settings-cog.png";
+import logoutIcon from "../assets/imgs/logout.png";
 
 const Header = () => {
   const auth = getAuth();
@@ -52,13 +52,18 @@ const Header = () => {
       >
         <img
           id="pfpCir"
-          style={{display: 'block', width: "60%", height: "60%"}}
-          src={cog}
+          style={{ display: "block", width: "60%", height: "60%" }}
+          src={logoutIcon}
           ref={profilePicRef}
-          alt="settings"
+          alt="logout"
+          onClick={() => {
+            doSignOut().then(() => {
+              navigate("/login");
+            });
+          }}
         />
       </div>
-      {showDropdown && (
+      {/* {showDropdown && (
         <div id="dropdown" ref={dropdownRef}>
           <Link to="/settings" className="options">
             Settings
@@ -74,7 +79,7 @@ const Header = () => {
             Logout
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

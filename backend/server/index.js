@@ -50,6 +50,18 @@ app.post(
   upload.any(),
   async (req, res) => {
     try {
+      let totalSize = 0;
+      req.files.forEach(file => {
+        totalSize += file.size;
+      });
+    
+      // Set maximum total size allowed
+      const maxTotalSize = 15 * 1024 * 1024; // Example limit: 50MB
+    
+      // Check if total size exceeds the maximum limit
+      if (totalSize > maxTotalSize) {
+        return res.status(400).send('Total file size exceeds the limit.');
+      }
   
       const files = req.files;
       const coverFile = req.files[0];
@@ -152,6 +164,10 @@ app.delete("/capsules/:id", verifyToken, async (req, res) => {
       "DELETE FROM capsules WHERE capsule_id = $1 RETURNING *",
       [id]
     );
+    await bucket.file(`covers/${id}`).delete();
+    await bucket.deleteFiles({
+      prefix: `capsules/${id}`,
+    });
     res.json(capsule.rows[0]);
   } catch (err) {
     console.error(err.message);

@@ -4,7 +4,7 @@ import lock from "../assets/imgs/locked.png";
 import edit from "../assets/imgs/edit.png";
 import del from "../assets/imgs/delete.png";
 import Layout from "../components/Layout";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, listAll, getMetadata } from "firebase/storage";
 import { fstorage } from "../firebase/firebase";
@@ -24,12 +24,31 @@ const CapsuleInfo = ({}) => {
   const [capFileObjs, setCapFileObjs] = useState([]);
   const [rerender, setRerender] = useState(false);
   const [contentLoading, setContentLoading] = useState(false);
+  const [contentDeleting, setContentDeleting] = useState(false);
 
   const [isWide, setIsWide] = useState(false);
 
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const folderRef = ref(fstorage, `/capsules/${id}`);
+
+  async function handleDelete() {
+    setContentDeleting(true);
+    try {
+      const idToken = await currentUser.getIdToken(true);
+      await fetch(`http://localhost:5000/capsules/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    
+    setContentDeleting(false);
+    navigate('/');
+  }
 
   async function handleOpenLock() {
     if (new Date() < openDate) {
@@ -165,7 +184,7 @@ const CapsuleInfo = ({}) => {
             />
           </div>
           <div id="buttonWrap">
-            <img id="del" src={del} alt="delete" />
+            <img id="del" src={del} alt="delete" onClick={handleDelete}/>
           </div>
           <h1>{capTitle}</h1>
           {opened && <p style={{paddingLeft: '8vw',paddingRight: '8vw', marginTop: '20px', marginBottom: '50px'}}>{capNotes}</p>}
@@ -188,14 +207,14 @@ const CapsuleInfo = ({}) => {
                       type="image"
                     />
                   )}
-                  {file.type.startsWith("video/") && (
+                  {/* {file.type.startsWith("video/") && (
                     <ResizingImage
                     src={file.url}
                     alt="image file"
                     size={300}
                     type="video"
                   />
-                  )}
+                  )} */}
                 </React.Fragment>
               ))}
             </div>
@@ -208,6 +227,13 @@ const CapsuleInfo = ({}) => {
         <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
         <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
         <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Opening...</p>
+      </div>)}
+      {contentDeleting && (<div
+        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
+      >
+        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
+        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
+        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Deleting...</p>
       </div>)}
     </Layout>
   );

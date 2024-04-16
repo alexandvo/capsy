@@ -118,12 +118,6 @@
   }
 }
 
-@media (min-height: 600px) {
-  #mainContainer {
-    /* height: calc(100vh - 80px); */
-  }
-}
-
 @media (min-width: 500px) {
   #pfpWrap {
     height: 180px;

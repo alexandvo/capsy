@@ -23,14 +23,14 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
           alt={file.name}
         />
       )}
-      {file.type.startsWith("video/") && (
+      {/* {file.type.startsWith("video/") && (
         <video
         controls
           style={{ width: "auto", height: "100%" }}
           src={URL.createObjectURL(file)}
           alt={file.name}
         />
-      )}
+      )} */}
       <div
         style={{ position: "absolute", top: "0px", right: "0px"}}
         id="minButton"

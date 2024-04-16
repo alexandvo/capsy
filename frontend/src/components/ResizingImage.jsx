@@ -28,7 +28,7 @@ const ResizingImage = ({ type, size, src, alt }) => {
           alt={alt}
         />
       )}
-      {type === "video" && (
+      {/* {type === "video" && (
         <video
           onLoadedData={handleMediaLoad}
           style={dimensions}
@@ -37,7 +37,7 @@ const ResizingImage = ({ type, size, src, alt }) => {
         >
           
         </video>
-      )}
+      )} */}
     </>
   );
 };
