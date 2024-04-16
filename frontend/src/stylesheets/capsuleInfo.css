@@ -70,6 +70,7 @@
   width: auto;
   word-wrap: break-word;
   /* font-size: 2vw; */
+  font-size: 20px;
   color: var(--sup);
   font-family: var(--reg);
   margin-bottom: 10px;
@@ -132,9 +133,6 @@
   }
   #mainContainer h1 {
     font-size: 40px;
-  }
-  #desc {
-    font-size: 20px;
   }
   #mainContainer p {
     font-size: 20px;

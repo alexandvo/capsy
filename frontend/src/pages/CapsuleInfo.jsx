@@ -23,6 +23,7 @@ const CapsuleInfo = ({}) => {
   const [openDate, setOpenDate] = useState();
   const [capFileObjs, setCapFileObjs] = useState([]);
   const [rerender, setRerender] = useState(false);
+  const [contentLoading, setContentLoading] = useState(false);
 
   const [isWide, setIsWide] = useState(false);
 
@@ -35,6 +36,7 @@ const CapsuleInfo = ({}) => {
       return;
     }
     try {
+      setContentLoading(true);
       const idToken = await currentUser.getIdToken(true);
       await fetch(`http://localhost:5000/capsules/${id}`, {
         method: 'PUT',
@@ -45,6 +47,7 @@ const CapsuleInfo = ({}) => {
     } catch (err) {
       console.error(err.message);
     }
+    
     setRerender(!rerender);
   }
 
@@ -98,6 +101,7 @@ const CapsuleInfo = ({}) => {
     }
 
     setLoading(false);
+    setContentLoading(false);
   }
 
   const handleImageLoad = (event) => {
@@ -167,8 +171,8 @@ const CapsuleInfo = ({}) => {
           {opened && <p style={{paddingLeft: '8vw',paddingRight: '8vw', marginTop: '20px', marginBottom: '50px'}}>{capNotes}</p>}
           {!opened && (
             <>
-              <p id="status">{new Date() >= openDate ? "Unlockable Now!" : "Locked"}</p>
-              <img id="lock" src={lock} alt="lock" onClick={handleOpenLock} className={new Date() >= openDate ? "shake" : ''}/>
+              <p id="status" style={{margin: '20px'}}>{new Date() >= openDate ? "Unlockable Now!" : "Locked"}</p>
+              <img id="lock" style={{margin: '20px'}} src={lock} alt="lock" onClick={handleOpenLock} className={new Date() >= openDate ? "shake" : ''}/>
             </>
           )}
           {opened && (
@@ -181,10 +185,16 @@ const CapsuleInfo = ({}) => {
                       src={file.url}
                       alt="image file"
                       size={300}
+                      type="image"
                     />
                   )}
                   {file.type.startsWith("video/") && (
-                    <video src={file.url} controls />
+                    <ResizingImage
+                    src={file.url}
+                    alt="image file"
+                    size={300}
+                    type="video"
+                  />
                   )}
                 </React.Fragment>
               ))}
@@ -192,6 +202,13 @@ const CapsuleInfo = ({}) => {
           )}
         </div>
       )}
+      {contentLoading && (<div
+        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
+      >
+        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
+        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
+        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Opening...</p>
+      </div>)}
     </Layout>
   );
 };

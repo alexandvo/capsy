@@ -50,24 +50,34 @@ app.post(
   upload.any(),
   async (req, res) => {
     try {
-      
+      let totalSize = 0;
+      req.files.forEach((file) => {
+        totalSize += file.size;
+      });
+
+      // Set maximum total size allowed
+      const maxTotalSize = 100 * 1024 * 1024; // Example limit: 50MB
+
+      // Check if total size exceeds the maximum limit
+      if (totalSize > maxTotalSize) {
+        return res.status(400).send("Total file size exceeds the limit.");
+      }
+
       const files = req.files;
       const coverFile = req.files[0];
       const folderName = "capsules";
       if (!files || files.length === 0) {
         return res.status(400).json({ error: "No files provided" });
       }
-      
+
       const { uid } = req.user;
       const { title, notes, opendate } = req.body;
       const newDate = new Date(opendate);
-      
-      
+
       const newCapsule = await pool.query(
         "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
         [title, notes, newDate, uid]
       );
-
 
       const subFolderName = newCapsule.rows[0].capsule_id;
 
@@ -75,8 +85,8 @@ app.post(
         const blob = bucket.file(`covers/${subFolderName}`);
         const blobStream = blob.createWriteStream({
           metadata: {
-            contentType: 'image/' + coverFile.originalname.split('.').pop()
-          }
+            contentType: "image/" + coverFile.originalname.split(".").pop(),
+          },
         });
         blobStream.end(coverFile.buffer);
       }
@@ -99,94 +109,6 @@ app.post(
     }
   }
 );
-
-// app.post("/capsules", verifyToken, (req, res) => {
-//   try {
-//     if (
-//       req.headers["content-type"] &&
-//       req.headers["content-type"].includes("multipart/form-data")
-//     ) {
-//       const busboy = Busboy({ headers: req.headers });
-
-//       let title,
-//         notes,
-//         opendate,
-//         files = [];
-
-//       const { uid } = req.user;
-
-//       busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-//         files.push({ fieldname, file, filename, encoding, mimetype });
-//       });
-
-//       busboy.on("field", (fieldname, value) => {
-//         if (fieldname === "title") title = value;
-//         else if (fieldname === "notes") notes = value;
-//         else if (fieldname === "opendate") opendate = new Date(value);
-//         else if (fieldname === 'content') {
-//           const contentArray = JSON.parse(value);
-//           // Assuming cover file is the first element in the content array
-        
-//           // Insert cover file at the beginning of the files array
-     
-//           // Add the rest of the files from contentArray to files array
-//           files.push(...contentArray);
-//         }
-//       });
-
-//       busboy.on("finish", async () => {
-//         console.log("Busboy parsing finished");
-//         console.log(files);
-
-//         // Your database insertion logic here
-//         const newCapsule = await pool.query(
-//           "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
-//           [title, notes, opendate, uid]
-//         );
-
-//         const folderName = "capsules";
-//         const subFolderName = newCapsule.rows[0].capsule_id;
-//         const coverFile = files[0];
-
-//         if (coverFile) {
-//           const blob = bucket.file(`covers/${subFolderName}`);
-//           const blobStream = blob.createWriteStream({
-//             metadata: {
-//               contentType: coverFile.mimetype,
-//             },
-//           });
-//           blobStream.end(coverFile.buffer);
-//         }
-
-//         for (const file of files.slice(1)) {
-//           const fileName = file.originalname;
-//           const blob = bucket.file(
-//             `${folderName}/${subFolderName}/${fileName}`
-//           );
-//           const blobStream = blob.createWriteStream();
-
-//           blobStream.on("error", (err) => {
-//             console.error("Error uploading file:", err);
-//           });
-
-//           blobStream.end(file.buffer);
-//         }
-
-//         res.status(200).json({ success: true });
-//       });
-
-//       req.pipe(busboy); // Pipe the request stream into Busboy
-//     } else {
-//       // If the request is not multipart/form-data, handle accordingly
-//       res.status(400).json({ error: "Invalid request format" });
-//     }
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
-
-//get all capsules
 
 app.get("/capsules", verifyToken, async (req, res) => {
   try {

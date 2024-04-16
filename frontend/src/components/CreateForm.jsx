@@ -40,8 +40,15 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
   }
 
   const handleCreateCapsule = async () => {
-    if (!titleRef.current.value || !date || selectedFiles.length < 2 || !coverBeenSet) {
-      window.alert('Capsule must have at least a title, cover, content, and date');
+    if (
+      !titleRef.current.value ||
+      !date ||
+      selectedFiles.length < 2 ||
+      !coverBeenSet
+    ) {
+      window.alert(
+        "Capsule must have at least a title, cover, content, and date"
+      );
       return;
     }
     try {
@@ -53,40 +60,52 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         formData.append("content", item.rawFile);
       });
 
-      currentUser.getIdToken(true).then(async (idToken) => {
-        setLoading(true);
-        const response = await axios.post(
-          "http://localhost:5000/capsules",
-          formData,
-          {
+      currentUser
+        .getIdToken(true)
+        .then(async (idToken) => {
+          setLoading(true);
+          const capRes = await axios.get("http://localhost:5000/capsules", {
             headers: {
               Authorization: `Bearer ${idToken}`,
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
             },
+          });
+          if (capRes.data.length >= 10) {
+            setLoading(false);
+            window.alert("You have exceeded the maximum capsule limit: 10");
+            return;
           }
-        );
-        setLoading(false);
-        titleRef.current.value = '';
-        setDescription('');
-        setDate(new Date());
-        setSelectedFiles([]);
-        
-      }).catch((e) => {
-        setLoading(false);
-        console.error(e.message);
-      }) 
+          const response = await axios.post(
+            "http://localhost:5000/capsules",
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${idToken}`,
+                "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
+              },
+            }
+          );
+          setLoading(false);
+          titleRef.current.value = "";
+          setDescription("");
+          setDate(new Date());
+          setSelectedFiles([]);
+          setCoverBeenSet(false);
+        })
+        .catch((e) => {
+          setLoading(false);
+          window.alert("Total file size may be too large");
+        });
     } catch (error) {
       setLoading(false);
       console.error(error.message);
     }
-    
   };
 
   const expandDesc = () => {
     setShowExpandedDesc(true);
   };
   const minimizeDesc = () => {
-    
     setShowExpandedDesc(false);
   };
   const handleDescChange = (event) => {
@@ -100,7 +119,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
+      if (file.type.startsWith("image/")) {
         const fileObj = {
           rawFile: file,
           isCover: false,
@@ -110,7 +129,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         window.alert(
           "Unsupported file type: " +
             file.type +
-            "\nPlease choose either an image or a video.",
+            "\nPlease choose images only.",
           file.type
         );
         event.target.value = null;
@@ -166,7 +185,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         type="file"
         ref={fileInputRef}
         style={{ display: "none" }}
-        accept="image/*,video/*"
+        accept="image/*"
         onChange={handleFileChange}
         multiple
       />
@@ -285,14 +304,47 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
           )}
         </div>
       </div>
-      {loading && (<div
-        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
-      >
-        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
-        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
-        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Creating...</p>
-      </div>)}
-      
+      {loading && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "black",
+              opacity: "10%",
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+            }}
+          ></div>
+          <div
+            style={{
+              borderRadius: "100px",
+              backgroundColor: "white",
+              width: "120px",
+              height: "40px",
+              position: "absolute",
+            }}
+          ></div>
+          <p
+            style={{
+              fontSize: "15px",
+              textAlign: "center",
+              position: "absolute",
+            }}
+          >
+            Creating...
+          </p>
+        </div>
+      )}
     </>
   );
 };

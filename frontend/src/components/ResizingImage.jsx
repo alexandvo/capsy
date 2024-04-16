@@ -1,32 +1,46 @@
-import { useState } from "react";
 
-const ResizingImage = ({size, src, alt}) => {
-  const [isWide, setIsWide] = useState(false);
+
+import React, { useState } from "react";
+
+const ResizingImage = ({ type, size, src, alt }) => {
   const [dimensions, setDimensions] = useState({});
 
-  const handleImageLoad = (event) => {
-    const img = event.target;
-    
-    const aspectRatio = img.naturalWidth / img.naturalHeight;
+  const handleMediaLoad = (event) => {
+    const media = event.target;
+
+    const aspectRatio = media.naturalWidth / media.naturalHeight;
     const height = `${size / aspectRatio}px`; // Calculate height based on aspect ratio
-    if (img.naturalWidth > img.naturalHeight) {
-        setDimensions({ width: size, height});
-      } else {
-        setDimensions({ width: 'auto', height: size });
 
-
-      }
-    
+    if (media.naturalWidth > media.naturalHeight) {
+      setDimensions({ width: size, height });
+    } else {
+      setDimensions({ width: "auto", height: size });
+    }
   };
 
   return (
-    <img
-      onLoad={handleImageLoad}
-      style={dimensions}
-      src={src}
-      alt={alt}
-    />
+    <>
+      {type === "image" && (
+        <img
+          onLoad={handleMediaLoad}
+          style={dimensions}
+          src={src}
+          alt={alt}
+        />
+      )}
+      {type === "video" && (
+        <video
+          onLoadedData={handleMediaLoad}
+          style={dimensions}
+          src={src}
+          controls
+        >
+          
+        </video>
+      )}
+    </>
   );
 };
+
 
 export default ResizingImage;
