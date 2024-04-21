@@ -71,13 +71,7 @@
   /* background-color: orange; */
 }
 
-#plusButton {
-  position: fixed;
-  bottom: 2vw;
-  right: 2vw;
-  width: 80px;
-  height: 80px;
-}
+
 
 @media (min-width: 700px) {
   #picContainer {

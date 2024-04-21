@@ -2,24 +2,28 @@ import Layout from "../components/Layout";
 import "../stylesheets/home.css";
 import "../stylesheets/global.css";
 
+import plusButton from "../assets/imgs/plus-button.png";
+
 import React, { useEffect, useState } from "react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import CapsuleListItem from "../../src/components/CapsuleListItem";
-import plusButton from "../assets/imgs/plus-button.png";
 import CreateForm from "../components/CreateForm";
 import { getAuth } from "firebase/auth";
 import { getDownloadURL, ref } from "firebase/storage";
 import { fstorage } from "../firebase/firebase";
+import { useAuth } from "../contexts/authContext";
 
 const Home = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
   const [capsulesData, setCapsulesData] = useState([]);
-  const [rerender, setRerender] = useState(false);
+  // const [rerender, setRerender] = useState(false);
+
+  const { showForm, setShowForm, rerender, setRerender } = useAuth();
 
   const showIdToken = false;
 
@@ -81,7 +85,12 @@ const Home = () => {
   }, [rerender]);
 
   return (
-    <Layout>
+    <Layout
+      setShowForm={setShowForm}
+      showForm={showForm}
+      setRerender={setRerender}
+      rerender={rerender}
+    >
       <div
         style={{
           display: "flex",
@@ -101,18 +110,8 @@ const Home = () => {
           />
         ))}
       </div>
-      <div id="plusButton">
-        <img
-          style={{ width: "100%" }}
-          onClick={() => {
-            setShowForm(true);
-          }}
-          src={plusButton}
-          alt="plus button"
-        />
-      </div>
 
-      {showForm && (
+      {/* {showForm && (
         <div
           id="formBG"
           onClick={() => {
@@ -120,7 +119,17 @@ const Home = () => {
             setShowForm(false);
           }}
         ></div>
-      )}
+      )} */}
+      <div id="plusButtonHome">
+        <img
+          style={{ width: "65px", height: "auto" }}
+          onClick={() => {
+            setShowForm(!showForm);
+          }}
+          src={plusButton}
+          alt="plus button"
+        />
+      </div>
       {showForm && (
         <CreateForm
           setShow={setShowForm}
@@ -128,20 +137,22 @@ const Home = () => {
           rerender={rerender}
         />
       )}
-      {capsulesData.length === 0 && (<div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          bottom: 0,
-          zIndex: -10,
-          position: "absolute",
-        }}
-      >
-        <p>No capsules yet...</p>
-      </div>)}
+      {capsulesData.length === 0 && (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            bottom: 0,
+            zIndex: -10,
+            position: "absolute",
+          }}
+        >
+          <p>No capsules yet...</p>
+        </div>
+      )}
     </Layout>
   );
 };

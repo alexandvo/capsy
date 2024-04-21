@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import CapsuleList from "./pages/CapsuleList";
 import CapsuleInfo from "./pages/CapsuleInfo";
 import { AuthProvider } from "./contexts/authContext";
 import PrivateRoutes from "./components/ProtectedRoutes";

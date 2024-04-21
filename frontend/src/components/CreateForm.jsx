@@ -8,11 +8,16 @@ import axios from "axios";
 
 import useWindowDimensions from "../useWindow";
 import { getAuth } from "firebase/auth";
+import { useAuth } from "../contexts/authContext";
 
-const CreateForm = ({ setShow, setRerender, rerender }) => {
+const CreateForm = ({ setShow}) => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
   const titleRef = useRef();
+  const datePickerRef = useRef();
+
+  const { showForm, setShowForm, rerender, setRerender } = useAuth();
+
 
   const auth = getAuth();
   const currentUser = auth.currentUser;
@@ -21,7 +26,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
   const [description, setDescription] = useState("");
   const [coverBeenSet, setCoverBeenSet] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showExpandedDesc, setShowExpandedDesc] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -120,10 +125,10 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.type.startsWith("image/")
-      //  || file.type.startsWith("video/")
-      ) 
-      {
+      if (
+        file.type.startsWith("image/")
+        //  || file.type.startsWith("video/")
+      ) {
         const fileObj = {
           rawFile: file,
           isCover: false,
@@ -131,9 +136,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
         fileObjList = [...fileObjList, fileObj];
       } else {
         window.alert(
-          "Unsupported file type: " +
-            file.type +
-            "\nPlease choose images",
+          "Unsupported file type: " + file.type + "\nPlease choose images",
           file.type
         );
         event.target.value = null;
@@ -206,11 +209,23 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
             <div className="formInputBox" id="titleBox">
               <input type="text" ref={titleRef} placeholder="Title"></input>
             </div>
-            <div className="formInputBox" id="dateBox">
+            <div
+              className="formInputBox"
+              style={{cursor: 'text'}}
+              id="dateBox"
+              onClick={() => {
+                if (datePickerRef.current !== null) {
+                  datePickerRef.current.setOpen(true);
+                }
+              }}
+            >
               <DatePicker
+                ref={datePickerRef}
                 selected={date}
+                placeholderText="Date to be opened"
                 onChange={(date) => setDate(date)}
                 dateFormat="MMMM dd, yyyy"
+                minDate={new Date()}
               />
             </div>
             <div
@@ -318,6 +333,7 @@ const CreateForm = ({ setShow, setRerender, rerender }) => {
             height: "100%",
             position: "absolute",
             bottom: 0,
+            zIndex: 1000
           }}
         >
           <div

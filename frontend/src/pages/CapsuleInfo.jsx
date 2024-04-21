@@ -3,6 +3,7 @@ import "../stylesheets/capsuleInfo.css";
 import lock from "../assets/imgs/locked.png";
 import edit from "../assets/imgs/edit.png";
 import del from "../assets/imgs/delete.png";
+import download from "../assets/imgs/download.png";
 import Layout from "../components/Layout";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -10,10 +11,15 @@ import { getDownloadURL, ref, listAll, getMetadata } from "firebase/storage";
 import { fstorage } from "../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import ResizingImage from "../components/ResizingImage";
+import CreateForm from "../components/CreateForm";
+import { useAuth } from "../contexts/authContext";
 
 const CapsuleInfo = ({}) => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
+
+  const { showForm, setShowForm, rerender, setRerender } = useAuth();
+
 
   const [capTitle, setCapTitle] = useState("");
   const [capNotes, setCapNotes] = useState("");
@@ -22,7 +28,6 @@ const CapsuleInfo = ({}) => {
   const [coverUrl, setCoverUrl] = useState();
   const [openDate, setOpenDate] = useState();
   const [capFileObjs, setCapFileObjs] = useState([]);
-  const [rerender, setRerender] = useState(false);
   const [contentLoading, setContentLoading] = useState(false);
   const [contentDeleting, setContentDeleting] = useState(false);
 
@@ -32,12 +37,30 @@ const CapsuleInfo = ({}) => {
   const navigate = useNavigate();
   const folderRef = ref(fstorage, `/capsules/${id}`);
 
+function handleDownloadAll() {
+  console.log(capFileObjs);
+    capFileObjs.forEach((url, index) => {
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(new Blob([blob]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `image_${index}.jpg`); // Assign unique filename
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+        })
+        .catch(error => console.error('Error downloading image:', error));
+    });
+}
+
   async function handleDelete() {
     setContentDeleting(true);
     try {
       const idToken = await currentUser.getIdToken(true);
       await fetch(`http://localhost:5000/capsules/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
@@ -45,9 +68,9 @@ const CapsuleInfo = ({}) => {
     } catch (err) {
       console.error(err);
     }
-    
+
     setContentDeleting(false);
-    navigate('/');
+    navigate("/");
   }
 
   async function handleOpenLock() {
@@ -58,7 +81,7 @@ const CapsuleInfo = ({}) => {
       setContentLoading(true);
       const idToken = await currentUser.getIdToken(true);
       await fetch(`http://localhost:5000/capsules/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
@@ -66,25 +89,25 @@ const CapsuleInfo = ({}) => {
     } catch (err) {
       console.error(err.message);
     }
-    
+
     setRerender(!rerender);
   }
 
   async function getFiles() {
     const files = await listAll(folderRef);
-      // Get download URLs and file types for all files in the folder
-      const urls = await Promise.all(
-        files.items.map(async (item) => {
-          const url = await getDownloadURL(item);
-          const metadata = await getMetadata(item);
-          const contentType = metadata.contentType;
-          return { url, type: contentType };
-        })
-      );
+    // Get download URLs and file types for all files in the folder
+    const urls = await Promise.all(
+      files.items.map(async (item) => {
+        const url = await getDownloadURL(item);
+        // const metadata = await getMetadata(item);
+        // const contentType = metadata.contentType;
+        // return { url, type: contentType };
+        return url;
+      })
+    );
 
-      setCapFileObjs(urls);
+    setCapFileObjs(urls);
   }
-
 
   async function fetchCapsule() {
     try {
@@ -107,14 +130,12 @@ const CapsuleInfo = ({}) => {
       setCapTitle(title);
       setCapNotes(notes);
       setOpenDate(new Date(opendate));
-      
 
       if (unlocked) {
         //show everything and render from firebase
         await getFiles();
         setOpened(true);
       }
-
     } catch (err) {
       console.error(err.message);
     }
@@ -136,14 +157,10 @@ const CapsuleInfo = ({}) => {
     fetchCapsule();
   }, [rerender]);
 
-
-
   // Function to toggle the shaking animation
   const toggleShake = () => {
-
     // After a short delay, stop the shaking animation
-    setTimeout(() => {
-    }, 1000); // Adjust the duration of the animation as needed
+    setTimeout(() => {}, 1000); // Adjust the duration of the animation as needed
   };
 
   // Effect to trigger the shaking animation at random intervals
@@ -158,7 +175,6 @@ const CapsuleInfo = ({}) => {
     // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, []); // Empty dependency array ensures the effect runs only once
-
 
   return (
     <Layout>
@@ -184,21 +200,46 @@ const CapsuleInfo = ({}) => {
             />
           </div>
           <div id="buttonWrap">
-            <img id="del" src={del} alt="delete" onClick={handleDelete}/>
+            <img id="del" src={del} alt="delete" onClick={handleDelete} />
           </div>
+
           <h1>{capTitle}</h1>
-          {opened && <p style={{paddingLeft: '8vw',paddingRight: '8vw', marginTop: '20px', marginBottom: '50px'}}>{capNotes}</p>}
+          {opened && (
+            <div id="buttonWrap" style={{marginBottom: '0px'}}>
+              <p style={{ cursor: "pointer" , backgroundColor: '#d275ff', color: 'white', borderRadius: '100px', padding: '3px', paddingLeft: '10px', paddingRight: '10px'}} onClick={handleDownloadAll}>Download All Images</p>
+            </div>
+          )}
+          {opened && (
+            <p
+              style={{
+                paddingLeft: "8vw",
+                paddingRight: "8vw",
+                marginBottom: "50px",
+              }}
+            >
+              {capNotes}
+            </p>
+          )}
           {!opened && (
             <>
-              <p id="status" style={{margin: '20px'}}>{new Date() >= openDate ? "Unlockable Now!" : "Locked"}</p>
-              <img id="lock" style={{margin: '20px'}} src={lock} alt="lock" onClick={handleOpenLock} className={new Date() >= openDate ? "shake" : ''}/>
+              <p id="status" style={{ margin: "20px" }}>
+                {new Date() >= openDate ? "Unlockable Now!" : "Locked"}
+              </p>
+              <img
+                id="lock"
+                style={{ margin: "20px" }}
+                src={lock}
+                alt="lock"
+                onClick={handleOpenLock}
+                className={new Date() >= openDate ? "shake" : ""}
+              />
             </>
           )}
           {opened && (
             <div id="unlockedContainer">
               {capFileObjs.map((file, index) => (
                 <React.Fragment key={index}>
-                  {file.type.startsWith("image/") && (
+                  {/* {file.type.startsWith("image/") && (
                     // <img src={file.url} alt={`Image ${index}`} />
                     <ResizingImage
                       src={file.url}
@@ -206,7 +247,13 @@ const CapsuleInfo = ({}) => {
                       size={300}
                       type="image"
                     />
-                  )}
+                  )} */}
+                  <ResizingImage
+                      src={file}
+                      alt="image file"
+                      size={300}
+                      type="image"
+                    />
                   {/* {file.type.startsWith("video/") && (
                     <ResizingImage
                     src={file.url}
@@ -221,20 +268,94 @@ const CapsuleInfo = ({}) => {
           )}
         </div>
       )}
-      {contentLoading && (<div
-        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
-      >
-        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
-        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
-        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Opening...</p>
-      </div>)}
-      {contentDeleting && (<div
-        style={{display:"flex", justifyContent:"center", alignItems: "center", width: "100%", height: "100%" ,position: 'absolute', bottom: 0}}
-      >
-        <div style={{backgroundColor: "black", opacity: '10%', width: "100%", height: "100%" ,position: 'absolute'}}></div>
-        <div style={{borderRadius: '100px', backgroundColor: "white", width: "120px", height: "40px" ,position: 'absolute'}}></div>
-        <p style={{fontSize: '15px', textAlign: 'center', position: 'absolute'}}>Deleting...</p>
-      </div>)}
+      {contentLoading && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "black",
+              opacity: "10%",
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+            }}
+          ></div>
+          <div
+            style={{
+              borderRadius: "100px",
+              backgroundColor: "white",
+              width: "120px",
+              height: "40px",
+              position: "absolute",
+            }}
+          ></div>
+          <p
+            style={{
+              fontSize: "15px",
+              textAlign: "center",
+              position: "absolute",
+            }}
+          >
+            Opening...
+          </p>
+        </div>
+      )}
+      {contentDeleting && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "black",
+              opacity: "10%",
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+            }}
+          ></div>
+          <div
+            style={{
+              borderRadius: "100px",
+              backgroundColor: "white",
+              width: "120px",
+              height: "40px",
+              position: "absolute",
+            }}
+          ></div>
+          <p
+            style={{
+              fontSize: "15px",
+              textAlign: "center",
+              position: "absolute",
+            }}
+          >
+            Deleting...
+          </p>
+        </div>
+        
+      )}
+      {showForm && (
+        <CreateForm
+          setShow={setShowForm}
+        />
+      )}
     </Layout>
   );
 };
