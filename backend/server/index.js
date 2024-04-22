@@ -2,9 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
-const http = require("http");
 const multer = require("multer");
-const Busboy = require("busboy");
+const cron = require("node-cron");
+const nodemailer = require("nodemailer");
+
+require('dotenv').config();
 
 var admin = require("firebase-admin");
 
@@ -14,8 +16,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: "gs://capsy-4e418.appspot.com",
 });
-
-// const storage = multer.memoryStorage(); // Store files in memory (you can also specify diskStorage to store on disk)
 
 // Initialize multer middleware
 const upload = multer({
@@ -28,6 +28,62 @@ const bucket = admin.storage().bucket();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Initialize Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  // Configure email transport (e.g., SMTP)
+  service: "gmail",
+  auth: {
+    user: process.env.CAPSY_GMAIL, // Gmail address
+    pass: process.env.CAPSY_GMAIL_APP_PASS, // Gmail password or App Password
+  },
+});
+
+// Define function to send emails for overdue capsules
+const sendEmailsForOverdueCapsules = async () => {
+  const client = await pool.connect(); // Acquire a client from the pool
+  try {
+    // Query for overdue capsules that haven't had an email sent
+    const query = `
+      SELECT * 
+      FROM capsules 
+      WHERE openDate <= NOW() 
+      AND emailSent = false
+    `;
+    const result = await client.query(query);
+    const capsules = result.rows;
+
+    // Process each overdue capsule
+    for (const capsule of capsules) {
+      // Send email to the recipient
+      const userRecord = await admin.auth().getUser(capsule.creator_id);
+      const email = userRecord.email;
+      await transporter.sendMail({
+        to: email,
+        subject: `Your time capsule is ready to be opened!`,
+        html: `
+    <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${capsule.createdate.toDateString()}</strong> is ready to be opened!</p>
+    <p>Visit the Capsy website <a href="http://localhost:3000/">here</a> to open your capsule.</p>
+  `,
+      });
+
+      // Update database to mark email as sent
+      await client.query(
+        "UPDATE capsules SET emailSent = true WHERE capsule_id = $1",
+        [capsule.capsule_id]
+      );
+    }
+
+    console.log("Emails sent for overdue capsules:", capsules.length);
+  } catch (error) {
+    console.error("Error sending emails:", error);
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
+};
+
+// Schedule the task to run every minute
+cron.schedule('0 0 * * *', sendEmailsForOverdueCapsules);
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -51,18 +107,18 @@ app.post(
   async (req, res) => {
     try {
       let totalSize = 0;
-      req.files.forEach(file => {
+      req.files.forEach((file) => {
         totalSize += file.size;
       });
-    
+
       // Set maximum total size allowed
       const maxTotalSize = 15 * 1024 * 1024; // Example limit: 50MB
-    
+
       // Check if total size exceeds the maximum limit
       if (totalSize > maxTotalSize) {
-        return res.status(400).send('Total file size exceeds the limit.');
+        return res.status(400).send("Total file size exceeds the limit.");
       }
-  
+
       const files = req.files;
       const coverFile = req.files[0];
       const folderName = "capsules";
@@ -75,8 +131,8 @@ app.post(
       const newDate = new Date(opendate);
 
       const newCapsule = await pool.query(
-        "INSERT INTO capsules (title, notes, opendate, creator_id) VALUES ($1, $2, $3, $4) RETURNING *",
-        [title, notes, newDate, uid]
+        "INSERT INTO capsules (title, notes, createDate, opendate, creator_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [title, notes, new Date(), newDate, uid]
       );
 
       const subFolderName = newCapsule.rows[0].capsule_id;
@@ -179,7 +235,7 @@ app.delete("/capsules/:id", verifyToken, async (req, res) => {
 app.post("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { email} = req.body;
+    const { email } = req.body;
     const existingUser = await pool.query(
       "SELECT * FROM users WHERE user_id = $1",
       [id]
@@ -191,7 +247,6 @@ app.post("/users/:id", async (req, res) => {
       );
       res.json(newUser.rows[0]);
     }
-    
   } catch (err) {
     console.error(err.message);
   }

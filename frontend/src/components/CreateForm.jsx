@@ -10,14 +10,13 @@ import useWindowDimensions from "../useWindow";
 import { getAuth } from "firebase/auth";
 import { useAuth } from "../contexts/authContext";
 
-const CreateForm = ({ setShow}) => {
+const CreateForm = ({ setShow }) => {
   const fileInputRef = useRef();
   const coverInputRef = useRef();
   const titleRef = useRef();
   const datePickerRef = useRef();
 
   const { showForm, setShowForm, rerender, setRerender } = useAuth();
-
 
   const auth = getAuth();
   const currentUser = auth.currentUser;
@@ -31,6 +30,7 @@ const CreateForm = ({ setShow}) => {
   const [showExpandedDesc, setShowExpandedDesc] = useState(false);
   const [loading, setLoading] = useState(false);
   const expendedDescRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
 
   function handleUploadContentClick() {
     fileInputRef.current.click();
@@ -211,11 +211,11 @@ const CreateForm = ({ setShow}) => {
             </div>
             <div
               className="formInputBox"
-              style={{cursor: 'text'}}
+              style={{ cursor: "text"}}
               id="dateBox"
               onClick={() => {
-                if (datePickerRef.current !== null) {
-                  datePickerRef.current.setOpen(true);
+                if (!isOpen) {
+                  setIsOpen(true);
                 }
               }}
             >
@@ -223,9 +223,16 @@ const CreateForm = ({ setShow}) => {
                 ref={datePickerRef}
                 selected={date}
                 placeholderText="Date to be opened"
-                onChange={(date) => setDate(date)}
+                onChange={(date) => {
+                  setDate(date);
+                  setIsOpen(false);
+                }}
+                onInputClick={() => setIsOpen(true)}
+                onClickOutside={() => setIsOpen(false)}
                 dateFormat="MMMM dd, yyyy"
                 minDate={new Date()}
+                open={isOpen}
+                customInput={<input style={{width: '100%'}} />}
               />
             </div>
             <div
@@ -333,7 +340,7 @@ const CreateForm = ({ setShow}) => {
             height: "100%",
             position: "absolute",
             bottom: 0,
-            zIndex: 1000
+            zIndex: 1000,
           }}
         >
           <div
