@@ -38,7 +38,6 @@ const CapsuleInfo = ({}) => {
   const folderRef = ref(fstorage, `/capsules/${id}`);
 
 function handleDownloadAll() {
-  console.log(capFileObjs);
     capFileObjs.forEach((url, index) => {
       fetch(url)
         .then(response => response.blob())
@@ -89,7 +88,6 @@ function handleDownloadAll() {
     } catch (err) {
       console.error(err.message);
     }
-
     setRerender(!rerender);
   }
 
@@ -123,13 +121,13 @@ function handleDownloadAll() {
       } else {
         capsule = await capsuleRes.json();
       }
-      const { title, notes, opendate, creator_id, unlocked } = capsule;
+      const { title, notes, openDate, creator_id, unlocked } = capsule;
       const imgRef = ref(fstorage, `covers/${id}`);
       const url = await getDownloadURL(imgRef);
       setCoverUrl(url);
       setCapTitle(title);
       setCapNotes(notes);
-      setOpenDate(new Date(opendate));
+      setOpenDate(new Date(openDate));
 
       if (unlocked) {
         //show everything and render from firebase

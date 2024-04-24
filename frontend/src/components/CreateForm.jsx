@@ -75,11 +75,11 @@ const CreateForm = ({ setShow }) => {
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
             },
           });
-          if (capRes.data.length >= 10) {
-            setLoading(false);
-            window.alert("You have exceeded the maximum capsule limit: 10");
-            return;
-          }
+          // if (capRes.data.length >= 10) {
+          //   setLoading(false);
+          //   window.alert("You have exceeded the maximum capsule limit: 10");
+          //   return;
+          // }
           const response = await axios.post(
             "http://localhost:5000/capsules",
             formData,
@@ -230,7 +230,7 @@ const CreateForm = ({ setShow }) => {
                 onInputClick={() => setIsOpen(true)}
                 onClickOutside={() => setIsOpen(false)}
                 dateFormat="MMMM dd, yyyy"
-                minDate={new Date()}
+                // minDate={new Date()}
                 open={isOpen}
                 customInput={<input style={{width: '100%'}} />}
               />

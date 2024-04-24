@@ -53,7 +53,7 @@ const Home = () => {
         .then((data) => {
           Promise.all(
             data.map(async (el) => {
-              const dateFromDB = new Date(el.opendate);
+              const dateFromDB = new Date(el.openDate);
               const imgRef = ref(fstorage, `covers/${el.capsule_id}`);
               try {
                 const url = await getDownloadURL(imgRef);
