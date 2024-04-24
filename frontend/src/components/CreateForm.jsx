@@ -69,7 +69,7 @@ const CreateForm = ({ setShow }) => {
         .getIdToken(true)
         .then(async (idToken) => {
           setLoading(true);
-          const capRes = await axios.get("http://localhost:5000/capsules", {
+          const capRes = await axios.get("https://capsy-backend.onrender.com/capsules", {
             headers: {
               Authorization: `Bearer ${idToken}`,
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
@@ -81,7 +81,7 @@ const CreateForm = ({ setShow }) => {
           //   return;
           // }
           const response = await axios.post(
-            "http://localhost:5000/capsules",
+            "https://capsy-backend.onrender.com/capsules",
             formData,
             {
               headers: {
