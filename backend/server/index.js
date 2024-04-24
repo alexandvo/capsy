@@ -64,14 +64,34 @@ const sendEmailsForOverdueCapsules = async () => {
       const userRecord = await admin.auth().getUser(capsule.creator_id);
       const email = userRecord.email;
 
-      console.log(capsule.createDate);
+      
+
+      function formatDate(inputDate) {
+        // Create a new Date object from the input string
+        var date = new Date(inputDate);
+        
+        // Get day, month, and year from the Date object
+        var day = date.getDate();
+        var month = date.toLocaleString('en-us', { month: 'long' });
+        var year = date.getFullYear();
+        
+        // Construct the formatted date string
+        var formattedDate = month + ' ' + day + ', ' + year;
+        
+        // Return the formatted date string
+        return formattedDate;
+    }
+    
+    var formattedDateString = formatDate(capsule.createDate);
+
+    console.log(formattedDateString);
 
       // Send email code remains the same
       await transporter.sendMail({
         to: email,
         subject: `Your time capsule is ready to be opened!`,
         html: `
-            <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${capsule.createDate}</strong> is ready to be opened!</p>
+            <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${formattedDateString}</strong> is ready to be opened!</p>
             <p>Visit the Capsy website <a href="http://localhost:3000/">here</a> to open your capsule.</p>
           `,
       });
@@ -79,7 +99,7 @@ const sendEmailsForOverdueCapsules = async () => {
       // Update database to mark email as sent
       const { error } = await supabase
         .from("capsules")
-        .update({ emailSent: true })
+        .update({ emailSent: true }) 
         .eq("capsule_id", capsule.capsule_id);
 
       if (error) {
@@ -87,7 +107,7 @@ const sendEmailsForOverdueCapsules = async () => {
       }
     }
 
-    console.log("Emails sent for overdue capsules hi:", data.length);
+    console.log("Emails sent for overdue capsules:", data.length);
   } catch (error) {
     console.error("Error sending emails:", error.message);
   }

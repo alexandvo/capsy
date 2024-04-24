@@ -38,7 +38,7 @@ const Home = () => {
 
   useEffect(() => {
     currentUser.getIdToken(true).then((idToken) => {
-      fetch("https://capsy-backend.onrender.com/capsules", {
+      fetch("http://localhost:5000/capsules", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${idToken}`,

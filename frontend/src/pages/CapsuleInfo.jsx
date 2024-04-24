@@ -58,7 +58,7 @@ function handleDownloadAll() {
     setContentDeleting(true);
     try {
       const idToken = await currentUser.getIdToken(true);
-      await fetch(`https://capsy-backend.onrender.com/capsules/${id}`, {
+      await fetch(`http://localhost:5000/capsules/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${idToken}`,
@@ -79,7 +79,7 @@ function handleDownloadAll() {
     try {
       setContentLoading(true);
       const idToken = await currentUser.getIdToken(true);
-      await fetch(`https://capsy-backend.onrender.com/capsules/${id}`, {
+      await fetch(`http://localhost:5000/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${idToken}`,
@@ -110,7 +110,7 @@ function handleDownloadAll() {
   async function fetchCapsule() {
     try {
       const idToken = await currentUser.getIdToken(true);
-      const capsuleRes = await fetch(`https://capsy-backend.onrender.com/capsules/${id}`, {
+      const capsuleRes = await fetch(`http://localhost:5000/capsules/${id}`, {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
