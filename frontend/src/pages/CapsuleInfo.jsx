@@ -79,7 +79,7 @@ function handleDownloadAll() {
     try {
       setContentLoading(true);
       const idToken = await currentUser.getIdToken(true);
-      await fetch(`http://localhost:5000/${id}`, {
+      await fetch(`http://localhost:5000/capsules/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${idToken}`,

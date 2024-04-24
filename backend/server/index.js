@@ -64,27 +64,23 @@ const sendEmailsForOverdueCapsules = async () => {
       const userRecord = await admin.auth().getUser(capsule.creator_id);
       const email = userRecord.email;
 
-      
-
       function formatDate(inputDate) {
         // Create a new Date object from the input string
         var date = new Date(inputDate);
-        
+
         // Get day, month, and year from the Date object
         var day = date.getDate();
-        var month = date.toLocaleString('en-us', { month: 'long' });
+        var month = date.toLocaleString("en-us", { month: "long" });
         var year = date.getFullYear();
-        
+
         // Construct the formatted date string
-        var formattedDate = month + ' ' + day + ', ' + year;
-        
+        var formattedDate = month + " " + day + ", " + year;
+
         // Return the formatted date string
         return formattedDate;
-    }
-    
-    var formattedDateString = formatDate(capsule.createDate);
+      }
 
-    console.log(formattedDateString);
+      var formattedDateString = formatDate(capsule.createDate);
 
       // Send email code remains the same
       await transporter.sendMail({
@@ -99,7 +95,7 @@ const sendEmailsForOverdueCapsules = async () => {
       // Update database to mark email as sent
       const { error } = await supabase
         .from("capsules")
-        .update({ emailSent: true }) 
+        .update({ emailSent: true })
         .eq("capsule_id", capsule.capsule_id);
 
       if (error) {
