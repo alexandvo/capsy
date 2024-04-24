@@ -64,7 +64,7 @@ const sendEmailsForOverdueCapsules = async () => {
       const userRecord = await admin.auth().getUser(capsule.creator_id);
       const email = userRecord.email;
 
-      // console.log(capsule.createDate);
+      console.log(capsule.createDate);
 
       // Send email code remains the same
       await transporter.sendMail({
