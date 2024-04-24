@@ -87,7 +87,7 @@ const sendEmailsForOverdueCapsules = async () => {
       }
     }
 
-    console.log("Emails sent for overdue capsules:", data.length);
+    console.log("Emails sent for overdue capsules hi:", data.length);
   } catch (error) {
     console.error("Error sending emails:", error.message);
   }
