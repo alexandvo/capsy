@@ -1,3 +1,5 @@
+import ResizingImage from "./ResizingImage";
+
 const ContentItem = ({ index, fileObj, removeFileFunc }) => {
   const file = fileObj.rawFile;
   const isCover = fileObj.isCover;
@@ -16,13 +18,17 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
         border: isCover ? "4px solid red" : "" 
       }}
     >
-      {file.type.startsWith("image/") && (
+      <ResizingImage type='image' src={URL.createObjectURL(file)} alt='content item' size={100} swap={true}/>
+
+      {/* {file.type.startsWith("image/") && (
         <img
           style={{ width: "auto", height: "100%" }}
           src={URL.createObjectURL(file)}
           alt={file.name}
         />
-      )}
+      )} */}
+
+      
       {/* {file.type.startsWith("video/") && (
         <video
         controls
@@ -33,7 +39,7 @@ const ContentItem = ({ index, fileObj, removeFileFunc }) => {
       )} */}
       <div
         style={{ position: "absolute", top: "0px", right: "0px"}}
-        id="minButton"
+        id="contentMinButton"
         onClick={() => removeFileFunc(index, isCover)}
       >
         <div className="crossPiece"></div>

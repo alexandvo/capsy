@@ -1,11 +1,9 @@
 import "../stylesheets/global.css";
 import "../stylesheets/capsuleInfo.css";
 import lock from "../assets/imgs/locked.png";
-import edit from "../assets/imgs/edit.png";
 import del from "../assets/imgs/delete.png";
-import download from "../assets/imgs/download.png";
 import Layout from "../components/Layout";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, listAll, getMetadata } from "firebase/storage";
 import { fstorage } from "../firebase/firebase";
@@ -198,7 +196,7 @@ function handleDownloadAll() {
             />
           </div>
           <div id="buttonWrap">
-            <img id="del" src={del} alt="delete" onClick={handleDelete} />
+            <img id="del" style={{cursor: 'pointer'}} src={del} alt="delete" onClick={handleDelete} />
           </div>
 
           <h1>{capTitle}</h1>
@@ -225,7 +223,7 @@ function handleDownloadAll() {
               </p>
               <img
                 id="lock"
-                style={{ margin: "20px" }}
+                style={{ margin: "20px", cursor: 'pointer' }}
                 src={lock}
                 alt="lock"
                 onClick={handleOpenLock}

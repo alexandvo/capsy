@@ -1,8 +1,6 @@
-
-
 import React, { useState } from "react";
 
-const ResizingImage = ({ type, size, src, alt }) => {
+const ResizingImage = ({ swap = false, type, size, src, alt }) => {
   const [dimensions, setDimensions] = useState({});
 
   const handleMediaLoad = (event) => {
@@ -11,22 +9,25 @@ const ResizingImage = ({ type, size, src, alt }) => {
     const aspectRatio = media.naturalWidth / media.naturalHeight;
     const height = `${size / aspectRatio}px`; // Calculate height based on aspect ratio
 
-    if (media.naturalWidth > media.naturalHeight) {
-      setDimensions({ width: size, height });
+    if (swap) {
+      if (media.naturalWidth <= media.naturalHeight) {
+        setDimensions({ width: size, height });
+      } else {
+        setDimensions({ width: "auto", height: size });
+      }
     } else {
-      setDimensions({ width: "auto", height: size });
+      if (media.naturalWidth > media.naturalHeight) {
+        setDimensions({ width: size, height });
+      } else {
+        setDimensions({ width: "auto", height: size });
+      }
     }
   };
 
   return (
     <>
       {type === "image" && (
-        <img
-          onLoad={handleMediaLoad}
-          style={dimensions}
-          src={src}
-          alt={alt}
-        />
+        <img onLoad={handleMediaLoad} style={dimensions} src={src} alt={alt} />
       )}
       {/* {type === "video" && (
         <video
@@ -41,6 +42,5 @@ const ResizingImage = ({ type, size, src, alt }) => {
     </>
   );
 };
-
 
 export default ResizingImage;

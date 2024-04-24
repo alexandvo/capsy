@@ -185,6 +185,24 @@
   cursor: pointer;
 }
 
+#contentMinButton {
+  background-color: red;
+  /* height: 2vw;
+  width: 2vw; */
+  height: 25px;
+    width: 25px;
+  position: absolute;
+  /* right: 2vw;
+  top: 2vw; */
+  /* right: 12px;
+    top: 12px; */
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 #descMinButton {
   background-color: green;
   /* height: 6vw;
