@@ -64,14 +64,14 @@ const sendEmailsForOverdueCapsules = async () => {
       const userRecord = await admin.auth().getUser(capsule.creator_id);
       const email = userRecord.email;
 
-      console.log(capsule);
+      // console.log(capsule.createDate);
 
       // Send email code remains the same
       await transporter.sendMail({
         to: email,
         subject: `Your time capsule is ready to be opened!`,
         html: `
-            <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${capsule.createdate}</strong> is ready to be opened!</p>
+            <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${capsule.createDate}</strong> is ready to be opened!</p>
             <p>Visit the Capsy website <a href="http://localhost:3000/">here</a> to open your capsule.</p>
           `,
       });
