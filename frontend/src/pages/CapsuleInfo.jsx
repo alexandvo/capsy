@@ -56,7 +56,7 @@ function handleDownloadAll() {
     setContentDeleting(true);
     try {
       const idToken = await currentUser.getIdToken(true);
-      await fetch(`https://capsy-backend.onrender.com/${id}`, {
+      await fetch(`https://capsy-backend.onrender.com/capsules/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${idToken}`,
@@ -77,7 +77,7 @@ function handleDownloadAll() {
     try {
       setContentLoading(true);
       const idToken = await currentUser.getIdToken(true);
-      await fetch(`https://capsy-backend.onrender.com/${id}`, {
+      await fetch(`https://capsy-backend.onrender.com/capsules/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${idToken}`,
