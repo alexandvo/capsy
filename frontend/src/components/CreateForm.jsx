@@ -254,7 +254,7 @@ const CreateForm = ({ setShow }) => {
                 ></textarea>
               ) : (
                 <textarea
-                  placeholder="Notes"
+                  placeholder="Note to self..."
                   value={description ? description : ""}
                   readOnly
                 ></textarea>
@@ -299,7 +299,7 @@ const CreateForm = ({ setShow }) => {
             <div id="createButton" onClick={handleCreateCapsule}>
               <h1>Create Time Capsule</h1>
             </div>
-            <div
+            {!showExpandedDesc && (<div
               id="minButton"
               style={{ right: "8px", top: "8px" }}
               onClick={() => {
@@ -309,7 +309,7 @@ const CreateForm = ({ setShow }) => {
             >
               <div className="crossPiece"></div>
               <div className="crossPiece"></div>
-            </div>
+            </div>)}
             {showExpandedDesc && (
               <textarea
                 id="eDesc"
