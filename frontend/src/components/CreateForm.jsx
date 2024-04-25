@@ -93,7 +93,7 @@ const CreateForm = ({ setShow }) => {
           setLoading(false);
           titleRef.current.value = "";
           setDescription("");
-          setDate(new Date());
+          setDate();
           setSelectedFiles([]);
           setCoverBeenSet(false);
         })
