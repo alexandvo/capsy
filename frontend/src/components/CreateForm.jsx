@@ -75,10 +75,10 @@ const CreateForm = ({ setShow }) => {
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
             },
           });
-          console.log(capRes.data);
-          if (capRes.data.length >= 2) {
+          // console.log(capRes.data);
+          if (capRes.data.length >= 5) {
             setLoading(false);
-            window.alert("You have exceeded the maximum capsule limit: 10");
+            window.alert("You have exceeded the maximum capsule limit: 5");
             return;
           }
           const response = await axios.post(
