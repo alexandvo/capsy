@@ -75,6 +75,7 @@ const CreateForm = ({ setShow }) => {
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
             },
           });
+          console.log(capRes.data);
           if (capRes.data.length >= 2) {
             setLoading(false);
             window.alert("You have exceeded the maximum capsule limit: 10");
