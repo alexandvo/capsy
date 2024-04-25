@@ -69,12 +69,15 @@ const CreateForm = ({ setShow }) => {
         .getIdToken(true)
         .then(async (idToken) => {
           setLoading(true);
-          const capRes = await axios.get("https://capsy-backend.onrender.com/capsules", {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-              "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
-            },
-          });
+          const capRes = await axios.get(
+            "https://capsy-backend.onrender.com/capsules",
+            {
+              headers: {
+                Authorization: `Bearer ${idToken}`,
+                "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
+              },
+            }
+          );
           // console.log(capRes.data);
           if (capRes.data.length >= 5) {
             setLoading(false);
@@ -204,15 +207,34 @@ const CreateForm = ({ setShow }) => {
         accept="image/*"
         onChange={handleCoverChange}
       />
-      <div id="mainAreaContainer">
+      <div
+        id="mainAreaContainer"
+        onClick={() => {
+        }}
+      >
         <div id="formBoxWrapper">
+          {showForm && (<div
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: 0,
+              left: 0,
+            }}
+            onClick={() => {
+              setShowForm(!showForm);
+              if (showForm) {
+                setRerender(!rerender);
+              }
+            }}
+          ></div>)}
           <div id="formBox">
             <div className="formInputBox" id="titleBox">
               <input type="text" ref={titleRef} placeholder="Title"></input>
             </div>
             <div
               className="formInputBox"
-              style={{ cursor: "text"}}
+              style={{ cursor: "text" }}
               id="dateBox"
               onClick={() => {
                 if (!isOpen) {
@@ -233,7 +255,7 @@ const CreateForm = ({ setShow }) => {
                 dateFormat="MMMM dd, yyyy"
                 minDate={new Date()}
                 open={isOpen}
-                customInput={<input style={{width: '100%'}} />}
+                customInput={<input style={{ width: "100%" }} />}
               />
             </div>
             <div
@@ -300,17 +322,19 @@ const CreateForm = ({ setShow }) => {
             <div id="createButton" onClick={handleCreateCapsule}>
               <h1>Create Time Capsule</h1>
             </div>
-            {!showExpandedDesc && (<div
-              id="minButton"
-              style={{ right: "8px", top: "8px" }}
-              onClick={() => {
-                setRerender(!rerender);
-                setShow(false);
-              }}
-            >
-              <div className="crossPiece"></div>
-              <div className="crossPiece"></div>
-            </div>)}
+            {!showExpandedDesc && (
+              <div
+                id="minButton"
+                style={{ right: "8px", top: "8px" }}
+                onClick={() => {
+                  setRerender(!rerender);
+                  setShow(false);
+                }}
+              >
+                <div className="crossPiece"></div>
+                <div className="crossPiece"></div>
+              </div>
+            )}
             {showExpandedDesc && (
               <textarea
                 id="eDesc"
