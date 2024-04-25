@@ -67,7 +67,7 @@ function handleDownloadAll() {
     }
 
     setContentDeleting(false);
-    navigate("/");
+    navigate("/capsy/");
   }
 
   async function handleOpenLock() {

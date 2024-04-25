@@ -230,7 +230,7 @@ const CreateForm = ({ setShow }) => {
                 onInputClick={() => setIsOpen(true)}
                 onClickOutside={() => setIsOpen(false)}
                 dateFormat="MMMM dd, yyyy"
-                minDate={new Date()}
+                // minDate={new Date()}
                 open={isOpen}
                 customInput={<input style={{width: '100%'}} />}
               />

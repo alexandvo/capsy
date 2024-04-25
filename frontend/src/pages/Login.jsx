@@ -29,7 +29,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleForgotPasswordClick = () => {
-    navigate('/forgotpassword');
+    navigate('/capsy/forgotpassword');
   }
 
   const handleLoginSubmit = async () => {
@@ -58,7 +58,7 @@ const Login = () => {
 
   return (
     <>
-      {userLoggedIn && <Navigate to="/" replace={true} />}
+      {userLoggedIn && <Navigate to="/capsy/" replace={true} />}
       <div className="mainContainer">
         <Link ref={linkRef} to="/signup" style={{ display: "none" }} />
         <div className="centeredContainer">

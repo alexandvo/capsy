@@ -15,12 +15,12 @@ function App() {
         <Routes>
           <Route element={<PrivateRoutes />}>
             
-            <Route path="/" exact element={<Home />} />
-            <Route path="/:id" element={<CapsuleInfo />} />
+            <Route path="capsy/" exact element={<Home />} />
+            <Route path="capsy/:id" element={<CapsuleInfo />} />
           </Route>
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="capsy/forgotpassword" element={<ForgotPassword />} />
+          <Route path="capsy/login" element={<Login />} />
+          <Route path="capsy/signup" element={<Signup />} />
         </Routes>
       </Router>
     </AuthProvider>

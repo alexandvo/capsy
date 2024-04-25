@@ -28,7 +28,7 @@ const CapsuleListItem = ({ id, title = "Title", date = "Date", coverUrl , unlock
     <div
       id="mainWrapper"
       onClick={() => {
-        navigate(`/${id}`);
+        navigate(`/capsy/${id}`);
       }}
     >
       <div id="picContainer">

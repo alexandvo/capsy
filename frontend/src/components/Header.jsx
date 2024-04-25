@@ -42,7 +42,7 @@ const Header = () => {
         style={{ cursor: "pointer" }}
         id="iconPicContainer"
         onClick={() => {
-          navigate("/");
+          navigate("/capsy/");
         }}
       >
         <img id="logoIcon" src={icon} alt="logo icon" />
@@ -77,7 +77,7 @@ const Header = () => {
           alt="logout"
           onClick={() => {
             doSignOut().then(() => {
-              navigate("/login");
+              navigate("/capsy/login");
             });
           }}
         />
