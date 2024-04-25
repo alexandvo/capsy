@@ -60,7 +60,7 @@ const Login = () => {
     <>
       {userLoggedIn && <Navigate to="/capsy/" replace={true} />}
       <div className="mainContainer">
-        <Link ref={linkRef} to="/signup" style={{ display: "none" }} />
+        <Link ref={linkRef} to="/capsy/signup" style={{ display: "none" }} />
         <div className="centeredContainer">
           <img src={logoIcon} className="logo" alt="logo" />
           <div className="loginContainer">
