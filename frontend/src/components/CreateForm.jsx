@@ -75,11 +75,11 @@ const CreateForm = ({ setShow }) => {
               "Content-Type": "multipart/form-data; boundary=l3iPy71otz",
             },
           });
-          // if (capRes.data.length >= 10) {
-          //   setLoading(false);
-          //   window.alert("You have exceeded the maximum capsule limit: 10");
-          //   return;
-          // }
+          if (capRes.data.length >= 10) {
+            setLoading(false);
+            window.alert("You have exceeded the maximum capsule limit: 10");
+            return;
+          }
           const response = await axios.post(
             "https://capsy-backend.onrender.com/capsules",
             formData,
