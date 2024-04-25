@@ -272,7 +272,7 @@ app.post(
         .insert({
           title,
           notes,
-          createDate: new Date().toDateString(),
+          createDate: (new Date()).toDateString(),
           openDate: newDate,
           creator_id: uid,
           unlocked: false,
