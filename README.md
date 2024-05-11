@@ -42,13 +42,9 @@
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -91,6 +87,19 @@ Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and 
 - Get emailed when a capsule is ready to be opened
 - Open your capsules when the date arrives to view your precious memories
 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Features
+
+- Create time capsules
+- Read time capsules
+- Delete time capsules
+- Dedicated frontend and backend
+- Authentication with Firebase Auth
+- Protected routes
+- Bearer tokens used to secure backend APIs
+- Google login/signup
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
