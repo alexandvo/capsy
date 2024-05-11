@@ -151,7 +151,7 @@ Alexander Vo - [@my_linkedin](https://www.linkedin.com/in/alexandvo) - alexthevo
 [PostgreSQL]: https://img.shields.io/badge/PostgreSQL-20232A?style=for-the-badge&logo=postgresql
 [PostgreSQL-url]: https://www.postgresql.org/
 [Firebase]: https://img.shields.io/badge/Firebase-20232A?style=for-the-badge&logo=firebase
-[Firebase-url]: https://firebase.google.com/
+[Firebase-url]: https://firebase.com/
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
