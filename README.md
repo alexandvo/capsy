@@ -60,6 +60,9 @@
 ## About The Project
 
 [![Capsy Screen Shot][product-screenshot]](https://alexandvo.github.io/capsy/)
+[![Capsy Screen Shot][product-screenshot1]](https://alexandvo.github.io/capsy/)
+[![Capsy Screen Shot][product-screenshot2]](https://alexandvo.github.io/capsy/)
+[![Capsy Screen Shot][product-screenshot3]](https://alexandvo.github.io/capsy/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -131,6 +134,9 @@ Alexander Vo - [@my_linkedin](https://www.linkedin.com/in/alexandvo) - alexthevo
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/alexandvo
 [product-screenshot]: images/capsy-screenshot.png
+[product-screenshot1]: images/capsule-info-screenshot.png
+[product-screenshot2]: images/capsule-info-openable.png
+[product-screenshot3]: images/capsule-opened.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react
