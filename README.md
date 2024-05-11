@@ -21,7 +21,7 @@
 <h3 align="center">Capsy</h3>
 
   <p align="center">
-    A virtual time capsule to remind yourselves of priceless memories. Create, wait, and open!
+    A virtual time capsule to remind yourself of priceless memories. Create, wait, and open!
     <br />
     <br />
     <a href="https://youtu.be/BykuEKITr7s">View Demo</a>
