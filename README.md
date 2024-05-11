@@ -79,6 +79,9 @@
 
 Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and begin making your virtual time capsules!
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
