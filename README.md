@@ -24,7 +24,7 @@
     A virtual time capsule to remind yourselves of priceless memories. Create, wait, and open!
     <br />
     <br />
-    <a href="https://github.com/alexandvo/capsy">View Demo</a>
+    <a href="https://youtu.be/BykuEKITr7s">View Demo</a>
   </p>
 </div>
 
