@@ -86,22 +86,13 @@ Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+- Click the plus button to open up the form to create your capsule
+- View all your capsules on the home page
+- Get emailed when a capsule is ready to be opened
+- Open your capsules when the date arrives to view your precious memories
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Capsule Creation
-- [ ] Capsule List View
-- [ ] Unlock Capsules at Release Date
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- LICENSE -->
 ## License
