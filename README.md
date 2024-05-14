@@ -55,7 +55,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Capsy Screen Shot][product-screenshot]](https://alexandvo.github.io/capsy/)
+[![Capsy Screen Shot][product-screenshot]](https://capsy.vercel.app/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -77,7 +77,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and begin making your virtual time capsules!
+Go to the website [here](https://capsy.vercel.app/), login/signup, and begin making your virtual time capsules!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
