@@ -29,7 +29,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleForgotPasswordClick = () => {
-    navigate('/capsy/forgotpassword');
+    navigate('/forgotpassword');
   }
 
   const handleLoginSubmit = async () => {
@@ -58,9 +58,9 @@ const Login = () => {
 
   return (
     <>
-      {userLoggedIn && <Navigate to="/capsy/" replace={true} />}
+      {userLoggedIn && <Navigate to="/" replace={true} />}
       <div className="mainContainer">
-        <Link ref={linkRef} to="/capsy/signup" style={{ display: "none" }} />
+        <Link ref={linkRef} to="/signup" style={{ display: "none" }} />
         <div className="centeredContainer">
           <img src={logoIcon} className="logo" alt="logo" />
           <div className="loginContainer">

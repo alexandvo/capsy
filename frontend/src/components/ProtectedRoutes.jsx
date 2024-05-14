@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/authContext'
 const PrivateRoutes = () => {
     const {userLoggedIn} = useAuth();
     return (
-        userLoggedIn ? <Outlet/> : <Navigate to='/capsy/login'/>
+        userLoggedIn ? <Outlet/> : <Navigate to='/login'/>
     )
 }
 

@@ -28,9 +28,9 @@ const ForgotPassword = () => {
 
   return (
     <>
-      {userLoggedIn && <Navigate to="/capsy/" replace={true} />}
+      {userLoggedIn && <Navigate to="/" replace={true} />}
       <div className="mainContainer">
-        <Link ref={linkRef} to="/capsy/login" style={{ display: "none" }} />
+        <Link ref={linkRef} to="/login" style={{ display: "none" }} />
         <div
           className="centeredContainer"
           style={{
