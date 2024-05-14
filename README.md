@@ -21,10 +21,10 @@
 <h3 align="center">Capsy</h3>
 
   <p align="center">
-    A virtual time capsule to remind yourselves of priceless memories. Create, wait, and open!
+    A virtual time capsule to remind yourself of priceless memories. Create, wait, and open!
     <br />
     <br />
-    <a href="https://github.com/alexandvo/capsy">View Demo</a>
+    <a href="https://youtu.be/BykuEKITr7s">View Demo</a>
   </p>
 </div>
 
@@ -42,13 +42,9 @@
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#features">Features</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -83,6 +79,9 @@
 
 Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and begin making your virtual time capsules!
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
@@ -91,6 +90,19 @@ Go to the website [here](https://alexandvo.github.io/capsy/), login/signup, and 
 - Get emailed when a capsule is ready to be opened
 - Open your capsules when the date arrives to view your precious memories
 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Features
+
+- Create time capsules
+- Read time capsules
+- Delete time capsules
+- Dedicated frontend and backend
+- Authentication with Firebase Auth
+- Protected routes
+- Bearer tokens used to secure backend APIs
+- Google login/signup
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
