@@ -88,7 +88,7 @@ const sendEmailsForOverdueCapsules = async () => {
         subject: `Your time capsule is ready to be opened!`,
         html: `
             <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${formattedDateString}</strong> is ready to be opened!</p>
-            <p>Visit the Capsy website <a href="https://alexandvo.github.io/capsy/">here</a> to open your capsule.</p>
+            <p>Visit the Capsy website <a href="https://capsy.vercel.app/">here</a> to open your capsule.</p>
           `,
       });
 
