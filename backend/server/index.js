@@ -10,6 +10,7 @@ const pool = require("./db");
 const multer = require("multer");
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
+const axios = require('axios');
 
 var admin = require("firebase-admin");
 
@@ -109,48 +110,6 @@ const sendEmailsForOverdueCapsules = async () => {
   }
 };
 
-// const sendEmailsForOverdueCapsules = async () => {
-//   const client = await pool.connect(); // Acquire a client from the pool
-//   try {
-//     // Query for overdue capsules that haven't had an email sent
-//     const query = `
-//       SELECT *
-//       FROM capsules
-//       WHERE openDate <= NOW()
-//       AND emailSent = false
-//     `;
-//     const result = await client.query(query);
-//     const capsules = result.rows;
-
-//     // Process each overdue capsule
-//     for (const capsule of capsules) {
-//       // Send email to the recipient
-//       const userRecord = await admin.auth().getUser(capsule.creator_id);
-//       const email = userRecord.email;
-//       await transporter.sendMail({
-//         to: email,
-//         subject: `Your time capsule is ready to be opened!`,
-//         html: `
-//     <p>Your virtual time capsule named <strong>${capsule.title}</strong> that was created on <strong>${capsule.createdate.toDateString()}</strong> is ready to be opened!</p>
-//     <p>Visit the Capsy website <a href="http://localhost:3000/">here</a> to open your capsule.</p>
-//   `,
-//       });
-
-//       // Update database to mark email as sent
-//       await client.query(
-//         "UPDATE capsules SET emailSent = true WHERE capsule_id = $1",
-//         [capsule.capsule_id]
-//       );
-//     }
-
-//     console.log("Emails sent for overdue capsules:", capsules.length);
-//   } catch (error) {
-//     console.error("Error sending emails:", error);
-//   } finally {
-//     client.release(); // Release the client back to the pool
-//   }
-// };
-
 // Schedule the task to run every minute
 
 cron.schedule("*/10 * * * * *", sendEmailsForOverdueCapsules);
@@ -166,75 +125,20 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
+cron.schedule('*/5 * * * *', async () => {
+  try {
+      await axios.get('https://capsy-backend.onrender.com/refresh');
+      console.log('Self-ping successful');
+  } catch (error) {
+      console.error('Self-ping failed:', error);
+  }
+});
+
 //ROUTES
 
-//create a capsule
-// app.post(
-//   "/capsules",
-//   verifyToken,
-//   // upload.array("content"),
-//   upload.any(),
-//   async (req, res) => {
-//     try {
-//       let totalSize = 0;
-//       req.files.forEach((file) => {
-//         totalSize += file.size;
-//       });
-
-//       // Set maximum total size allowed
-//       const maxTotalSize = 15 * 1024 * 1024; // Example limit: 50MB
-
-//       // Check if total size exceeds the maximum limit
-//       if (totalSize > maxTotalSize) {
-//         return res.status(400).send("Total file size exceeds the limit.");
-//       }
-
-//       const files = req.files;
-//       const coverFile = req.files[0];
-//       const folderName = "capsules";
-//       if (!files || files.length === 0) {
-//         return res.status(400).json({ error: "No files provided" });
-//       }
-
-//       const { uid } = req.user;
-//       const { title, notes, opendate } = req.body;
-//       const newDate = new Date(opendate);
-
-//       const newCapsule = await pool.query(
-//         "INSERT INTO capsules (title, notes, createDate, opendate, creator_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-//         [title, notes, new Date(), newDate, uid]
-//       );
-
-//       const subFolderName = newCapsule.rows[0].capsule_id;
-
-//       if (coverFile) {
-//         const blob = bucket.file(`covers/${subFolderName}`);
-//         const blobStream = blob.createWriteStream({
-//           metadata: {
-//             contentType: "image/" + coverFile.originalname.split(".").pop(),
-//           },
-//         });
-//         blobStream.end(coverFile.buffer);
-//       }
-
-//       for (const file of files.slice(1)) {
-//         const fileName = file.originalname;
-//         const blob = bucket.file(`${folderName}/${subFolderName}/${fileName}`);
-//         const blobStream = blob.createWriteStream();
-
-//         blobStream.on("error", (err) => {
-//           console.error("Error uploading file:", err);
-//         });
-
-//         blobStream.end(file.buffer);
-//       }
-
-//       res.json(newCapsule.rows[0]);
-//     } catch (err) {
-//       console.error(err.message);
-//     }
-//   }
-// );
+app.get("/refresh", async (req, res) => {
+  res.send('Refreshing Inactivity')
+})
 
 app.post(
   "/capsules",
