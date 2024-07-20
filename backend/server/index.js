@@ -125,20 +125,22 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-cron.schedule('*/5 * * * *', async () => {
-  try {
-      await axios.get('https://capsy-backend.onrender.com/refresh');
-      console.log('Self-ping successful');
-  } catch (error) {
-      console.error('Self-ping failed:', error);
-  }
-});
+// self pionging scheduler
+// cron.schedule('*/5 * * * *', async () => {
+//   try {
+//       await axios.get('https://capsy-backend.onrender.com/refresh');
+//       console.log('Self-ping successful');
+//   } catch (error) {
+//       console.error('Self-ping failed:', error);
+//   }
+// });
 
 //ROUTES
 
-app.get("/refresh", async (req, res) => {
-  res.send('Refreshing Inactivity')
-})
+//self pinging refresher
+// app.get("/refresh", async (req, res) => {
+//   res.send('Refreshing Inactivity')
+// })
 
 app.post(
   "/capsules",
